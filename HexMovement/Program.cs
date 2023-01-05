@@ -28,14 +28,6 @@ PrintHexGrid(hexGrid);
 
 hexGrid.OnMove += player => PrintHexGrid(hexGrid);
 
-hexGrid.OnMoveFail += player =>
-{
-    Console.WriteLine("Player cannot move there!");
-    Console.WriteLine();
-
-    PrintHexGrid(hexGrid);
-};
-
 string? input;
 
 do

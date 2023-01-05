@@ -15,8 +15,6 @@
 
         public event Action<Player>? OnMove;
 
-        public event Action<Player>? OnMoveFail;
-
         public HexGrid(int width, int height)
         {
             Width = width;
@@ -41,32 +39,17 @@
 
         public void MoveRight()
         {
-            if (Player.PosX == Width - 1)
-            {
-                // player cannot move like this when they're at the end of a row
-                OnMoveFail?.Invoke(Player);
-                return;
-            }
-
-            Player.MoveRight();
+            MoveRightAndWrap();
             OnMove?.Invoke(Player);
         }
 
         public void MoveDownRight()
         {
-            if (Player.PosY == Height - 1 || (Player.PosY % 2 != 0 && Player.PosX == Width - 1))
-            {
-                // player cannot move like this when they're in the last row
-                // or when they're at the end of an odd row
-                OnMoveFail?.Invoke(Player);
-                return;
-            }
-
-            Player.MoveDown();
+            MoveDownAndWrap();
 
             if (Player.PosY % 2 == 0)
             {
-                Player.MoveRight();
+                MoveRightAndWrap();
             }
 
             OnMove?.Invoke(Player);
@@ -74,19 +57,11 @@
 
         public void MoveDownLeft()
         {
-            if (Player.PosY == Height - 1 || (Player.PosY % 2 == 0 && Player.PosX == 0))
-            {
-                // player cannot move like this when they're in the last row
-                // or when they're at the start of an even row
-                OnMoveFail?.Invoke(Player);
-                return;
-            }
-
-            Player.MoveDown();
+            MoveDownAndWrap();
 
             if (Player.PosY % 2 != 0)
             {
-                Player.MoveLeft();
+                MoveLeftAndWrap();
             }
 
             OnMove?.Invoke(Player);
@@ -94,32 +69,17 @@
 
         public void MoveLeft()
         {
-            if (Player.PosX == 0)
-            {
-                // player cannot move like this when they're at the end of a row
-                OnMoveFail?.Invoke(Player);
-                return;
-            }
-
-            Player.MoveLeft();
+            MoveLeftAndWrap();
             OnMove?.Invoke(Player);
         }
 
         public void MoveUpLeft()
         {
-            if (Player.PosY == 0 || (Player.PosY % 2 == 0 && Player.PosX == 0))
-            {
-                // player cannot move like this when they're in the first row
-                // or when they're at the start of an even row
-                OnMoveFail?.Invoke(Player);
-                return;
-            }
-
-            Player.MoveUp();
+            MoveUpAndWrap();
 
             if (Player.PosY % 2 != 0)
             {
-                Player.MoveLeft();
+                MoveLeftAndWrap();
             }
 
             OnMove?.Invoke(Player);
@@ -127,22 +87,66 @@
 
         public void MoveUpRight()
         {
-            if (Player.PosY == 0 || (Player.PosY % 2 != 0 && Player.PosX == Width - 1))
-            {
-                // player cannot move like this when they're in the first row
-                // or when they're at the end of an odd row
-                OnMoveFail?.Invoke(Player);
-                return;
-            }
-
-            Player.MoveUp();
+            MoveUpAndWrap();
 
             if (Player.PosY % 2 == 0)
             {
-                Player.MoveRight();
+                MoveRightAndWrap();
             }
 
             OnMove?.Invoke(Player);
+        }
+
+        private void MoveRightAndWrap()
+        {
+            if (Player.PosX == Width - 1)
+            {
+                // wrap around when they're at the end of a row
+                Player.PosX = 0;
+            }
+            else
+            {
+                Player.MoveRight();
+            }
+        }
+
+        private void MoveDownAndWrap()
+        {
+            if (Player.PosY == Height - 1)
+            {
+                // wrap around when they're in the last row
+                Player.PosY = 0;
+            }
+            else
+            {
+                Player.MoveDown();
+            }
+        }
+
+        private void MoveLeftAndWrap()
+        {
+            if (Player.PosX == 0)
+            {
+                // wrap around when they're at the start of a row
+                Player.PosX = Width - 1;
+            }
+            else
+            {
+                Player.MoveLeft();
+            }
+        }
+
+        private void MoveUpAndWrap()
+        {
+            if (Player.PosY == 0)
+            {
+                // wrap around when they're in the first row
+                Player.PosY = Height - 1;
+            }
+            else
+            {
+                Player.MoveUp();
+            }
         }
 
         public override string ToString()
