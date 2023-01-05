@@ -1,4 +1,4 @@
-﻿namespace HexMovement
+﻿namespace HexGrid
 {
     public class Hex
     { }

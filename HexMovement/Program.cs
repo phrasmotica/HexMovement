@@ -1,11 +1,39 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using HexMovement;
+using HexGrid;
+using HexGridConsole;
 
-static void PrintHexGrid(HexGrid hexGrid)
+static void PrintHexGrid(HexGrid.HexGrid hexGrid, Player player)
 {
-    Console.WriteLine($"Player is at ({hexGrid.Player.PosX}, {hexGrid.Player.PosY})");
-    Console.WriteLine(hexGrid.ToString());
+    Console.WriteLine($"Player is at ({player.PosX}, {player.PosY})");
+    Console.WriteLine(ToString(hexGrid, player));
     Console.WriteLine();
+}
+
+static string ToString(HexGrid.HexGrid hexGrid, Player player)
+{
+    return string.Join("\n", hexGrid.Rows.Select((r, i) => RowToString(r, i, player)));
+}
+
+static string RowToString(List<Hex> hexes, int row, Player player)
+{
+    var joined = string.Join(" ", hexes.Select((h, col) => HexToString(row, col, player)));
+
+    if (row % 2 != 0)
+    {
+        joined = " " + joined;
+    }
+
+    return joined;
+}
+
+static string HexToString(int row, int col, Player player)
+{
+    return IsOccupied(row, col, player) ? "X" : ".";
+}
+
+static bool IsOccupied(int row, int col, Player player)
+{
+    return player.PosX == col && player.PosY == row;
 }
 
 static void PrintHelp()
@@ -23,10 +51,9 @@ static void PrintHelp()
 Console.WriteLine("HexGrid");
 Console.WriteLine();
 
-var hexGrid = new HexGrid(8, 6);
-PrintHexGrid(hexGrid);
-
-hexGrid.OnMove += player => PrintHexGrid(hexGrid);
+var hexGrid = new HexGrid.HexGrid(8, 6);
+var player = new Player();
+PrintHexGrid(hexGrid, player);
 
 string? input;
 
@@ -41,32 +68,38 @@ do
 
     if (input == "r")
     {
-        hexGrid.MoveRight();
+        (player.PosX, player.PosY) = hexGrid.MoveRight(player.PosX, player.PosY);
+        PrintHexGrid(hexGrid, player);
     }
 
     if (input == "dr")
     {
-        hexGrid.MoveDownRight();
+        (player.PosX, player.PosY) = hexGrid.MoveDownRight(player.PosX, player.PosY);
+        PrintHexGrid(hexGrid, player);
     }
 
     if (input == "dl")
     {
-        hexGrid.MoveDownLeft();
+        (player.PosX, player.PosY) = hexGrid.MoveDownLeft(player.PosX, player.PosY);
+        PrintHexGrid(hexGrid, player);
     }
 
     if (input == "l")
     {
-        hexGrid.MoveLeft();
+        (player.PosX, player.PosY) = hexGrid.MoveLeft(player.PosX, player.PosY);
+        PrintHexGrid(hexGrid, player);
     }
 
     if (input == "ul")
     {
-        hexGrid.MoveUpLeft();
+        (player.PosX, player.PosY) = hexGrid.MoveUpLeft(player.PosX, player.PosY);
+        PrintHexGrid(hexGrid, player);
     }
 
     if (input == "ur")
     {
-        hexGrid.MoveUpRight();
+        (player.PosX, player.PosY) = hexGrid.MoveUpRight(player.PosX, player.PosY);
+        PrintHexGrid(hexGrid, player);
     }
 
     if (input == "q")
