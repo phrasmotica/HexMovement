@@ -12,6 +12,8 @@
 
         public List<List<Hex>> Rows { get; }
 
+        public bool WrapMovement { get; set; }
+
         public HexGrid(int width, int height)
         {
             Width = width;
@@ -89,64 +91,62 @@
             return (posX, posY);
         }
 
+        public bool CanMoveRight(int posX) => posX < Width - 1;
+
+        public bool CanMoveDown(int posY) => posY < Height - 1;
+
+        public bool CanMoveLeft(int posX) => posX > 0;
+
+        public bool CanMoveUp(int posY) => posY > 0;
+
         private int MoveRightAndWrap(int posX)
         {
-            if (posX == Height - 1)
+            var newPos = posX + 1;
+
+            if (CanMoveRight(posX))
             {
-                // wrap around when they're in the last row
-                posX = 0;
-            }
-            else
-            {
-                posX += 1;
+                return newPos;
             }
 
-            return posX;
+            return WrapMovement ? newPos % Width : posX;
         }
 
         private int MoveDownAndWrap(int posY)
         {
-            if (posY == Height - 1)
+            var newPos = posY + 1;
+
+            if (CanMoveDown(posY))
             {
-                // wrap around when they're in the last row
-                posY = 0;
-            }
-            else
-            {
-                posY += 1;
+                return newPos;
             }
 
-            return posY;
+            return WrapMovement ? newPos % Height : posY;
         }
 
         private int MoveLeftAndWrap(int posX)
         {
-            if (posX == 0)
+            var newPos = posX - 1;
+
+            if (CanMoveLeft(posX))
             {
-                // wrap around when they're at the start of a row
-                posX = Width - 1;
-            }
-            else
-            {
-                posX -= 1;
+                return newPos;
             }
 
-            return posX;
+            // cannot use modulo on negative ints
+            return WrapMovement ? newPos + Width : posX;
         }
 
         private int MoveUpAndWrap(int posY)
         {
-            if (posY == 0)
+            var newPos = posY - 1;
+
+            if (CanMoveUp(posY))
             {
-                // wrap around when they're in the first row
-                posY = Height - 1;
-            }
-            else
-            {
-                posY -= 1;
+                return newPos;
             }
 
-            return posY;
+            // cannot use modulo on negative ints
+            return WrapMovement ? newPos + Height : posY;
         }
     }
 }

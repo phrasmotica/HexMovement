@@ -36,6 +36,14 @@ static bool IsOccupied(int row, int col, Player player)
     return player.PosX == col && player.PosY == row;
 }
 
+static void ToggleWrapMovement(HexGrid.HexGrid hexGrid)
+{
+    hexGrid.WrapMovement = !hexGrid.WrapMovement;
+
+    Console.WriteLine($"Wrap movement is now {hexGrid.WrapMovement}");
+    Console.WriteLine();
+}
+
 static void PrintHelp()
 {
     Console.WriteLine("Move right: r");
@@ -44,6 +52,7 @@ static void PrintHelp()
     Console.WriteLine("Move left: l");
     Console.WriteLine("Move up-left: ul");
     Console.WriteLine("Move up-right: ur");
+    Console.WriteLine("Toggle grid wrapping: wrap");
     Console.WriteLine("Quit: q");
     Console.WriteLine();
 }
@@ -59,6 +68,8 @@ string? input;
 
 do
 {
+    Console.Write("> ");
+
     input = Console.ReadLine()?.Trim();
 
     if (input == "help")
@@ -100,6 +111,11 @@ do
     {
         (player.PosX, player.PosY) = hexGrid.MoveUpRight(player.PosX, player.PosY);
         PrintHexGrid(hexGrid, player);
+    }
+
+    if (input == "wrap")
+    {
+        ToggleWrapMovement(hexGrid);
     }
 
     if (input == "q")
