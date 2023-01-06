@@ -1,4 +1,6 @@
-﻿namespace HexGrid
+﻿using System.Net.Http.Headers;
+
+namespace HexGrid
 {
     /// <summary>
     /// Represents a hexagonal grid in which something can be positioned.
@@ -43,6 +45,21 @@
 
         public (int, int) MoveDownRight(int posX, int posY)
         {
+            if (!WrapMovement)
+            {
+                // don't allow this in the bottom row
+                if (!CanMoveDown(posY))
+                {
+                    return (posX, posY);
+                }
+
+                // don't allow this at the end of an odd row
+                if (posY % 2 != 0 && !CanMoveRight(posX))
+                {
+                    return (posX, posY);
+                }
+            }
+
             posY = MoveDownAndWrap(posY);
 
             if (posY % 2 == 0)
@@ -55,6 +72,21 @@
 
         public (int, int) MoveDownLeft(int posX, int posY)
         {
+            if (!WrapMovement)
+            {
+                // don't allow this in the bottom row
+                if (!CanMoveDown(posY))
+                {
+                    return (posX, posY);
+                }
+
+                // don't allow this at the start of an even row
+                if (posY % 2 == 0 && !CanMoveLeft(posX))
+                {
+                    return (posX, posY);
+                }
+            }
+
             posY = MoveDownAndWrap(posY);
 
             if (posY % 2 != 0)
@@ -69,6 +101,21 @@
 
         public (int, int) MoveUpLeft(int posX, int posY)
         {
+            if (!WrapMovement)
+            {
+                // don't allow this in the top row
+                if (!CanMoveUp(posY))
+                {
+                    return (posX, posY);
+                }
+
+                // don't allow this at the start of an even row
+                if (posY % 2 == 0 && !CanMoveLeft(posX))
+                {
+                    return (posX, posY);
+                }
+            }
+
             posY = MoveUpAndWrap(posY);
 
             if (posY % 2 != 0)
@@ -81,6 +128,21 @@
 
         public (int, int) MoveUpRight(int posX, int posY)
         {
+            if (!WrapMovement)
+            {
+                // don't allow this in the top row
+                if (!CanMoveUp(posY))
+                {
+                    return (posX, posY);
+                }
+
+                // don't allow this at the end of an odd row
+                if (posY % 2 != 0 && !CanMoveRight(posX))
+                {
+                    return (posX, posY);
+                }
+            }
+
             posY = MoveUpAndWrap(posY);
 
             if (posY % 2 == 0)
