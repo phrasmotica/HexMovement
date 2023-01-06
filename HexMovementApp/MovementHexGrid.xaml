@@ -12,9 +12,10 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel x:Name="rowsPanel">
+            <Label Name="positionText" Content="Player position: (0, 0)" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24" />
+
             <StackPanel Orientation="Horizontal">
                 <Rectangle Width="40" Height="40" Fill="Crimson" Stroke="Black" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
                 <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
                 <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
                 <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
@@ -31,10 +32,7 @@
                 <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
                 <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
                 <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
             </StackPanel>
-
-            <Label Name="positionText" Content="Player position: (0, 0)" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24" />
         </StackPanel>
 
         <StackPanel x:Name="buttonsPanel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -46,7 +44,7 @@
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="buttonLeft" Content="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonLeft_Click" />
 
-                <CheckBox Content="Wrap"
+                <CheckBox x:Name="wrapCheckbox" Content="Wrap"
                           HorizontalAlignment="Left" VerticalAlignment="Top"
                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                           Width="48" Height="80" Margin="16,0"

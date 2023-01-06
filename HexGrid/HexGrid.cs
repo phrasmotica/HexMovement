@@ -1,8 +1,7 @@
 ﻿namespace HexGrid
 {
     /// <summary>
-    /// Represents a hexagonal grid in which something can be positioned.
-    /// Contains public methods for moving things around the grid.
+    /// Represents a hexagonal grid using a double-width coordinate system (see https://www.redblobgames.com/grids/hexagons/).
     /// </summary>
     public class HexGrid
     {
@@ -34,160 +33,71 @@
             }
         }
 
-        public (int, int) MoveRight(int posX, int posY)
-        {
-            posX = MoveRightAndWrap(posX);
-
-            return (posX, posY);
-        }
+        public (int, int) MoveRight(int posX, int posY) => (MoveRightAndWrap(posX, true), posY);
 
         public (int, int) MoveDownRight(int posX, int posY)
         {
-            if (!WrapMovement)
+            if (!WrapMovement && !CanMoveDownRight(posX, posY))
             {
-                // don't allow this in the bottom row
-                if (!CanMoveDown(posY))
-                {
-                    return (posX, posY);
-                }
-
-                // don't allow this at the end of an odd row
-                if (posY % 2 != 0 && !CanMoveRight(posX))
-                {
-                    return (posX, posY);
-                }
+                return (posX, posY);
             }
 
-            posY = MoveDownAndWrap(posY);
-
-            if (posY % 2 == 0)
-            {
-                posX = MoveRightAndWrap(posX);
-            }
-
-            return (posX, posY);
+            return (MoveRightAndWrap(posX, false), MoveDownAndWrap(posY));
         }
 
         public (int, int) MoveDownLeft(int posX, int posY)
         {
-            if (!WrapMovement)
+            if (!WrapMovement && !CanMoveDownLeft(posX, posY))
             {
-                // don't allow this in the bottom row
-                if (!CanMoveDown(posY))
-                {
-                    return (posX, posY);
-                }
-
-                // don't allow this at the start of an even row
-                if (posY % 2 == 0 && !CanMoveLeft(posX))
-                {
-                    return (posX, posY);
-                }
+                return (posX, posY);
             }
 
-            posY = MoveDownAndWrap(posY);
-
-            if (posY % 2 != 0)
-            {
-                posX = MoveLeftAndWrap(posX);
-            }
-
-            return (posX, posY);
+            return (MoveLeftAndWrap(posX, false), MoveDownAndWrap(posY));
         }
 
-        public (int, int) MoveLeft(int posX, int posY) => (MoveLeftAndWrap(posX), posY);
+        public (int, int) MoveLeft(int posX, int posY) => (MoveLeftAndWrap(posX, true), posY);
 
         public (int, int) MoveUpLeft(int posX, int posY)
         {
-            if (!WrapMovement)
+            if (!WrapMovement && !CanMoveUpLeft(posX, posY))
             {
-                // don't allow this in the top row
-                if (!CanMoveUp(posY))
-                {
-                    return (posX, posY);
-                }
-
-                // don't allow this at the start of an even row
-                if (posY % 2 == 0 && !CanMoveLeft(posX))
-                {
-                    return (posX, posY);
-                }
+                return (posX, posY);
             }
 
-            posY = MoveUpAndWrap(posY);
-
-            if (posY % 2 != 0)
-            {
-                posX = MoveLeftAndWrap(posX);
-            }
-
-            return (posX, posY);
+            return (MoveLeftAndWrap(posX, false), MoveUpAndWrap(posY));
         }
 
         public (int, int) MoveUpRight(int posX, int posY)
         {
-            if (!WrapMovement)
+            if (!WrapMovement && !CanMoveUpRight(posX, posY))
             {
-                // don't allow this in the top row
-                if (!CanMoveUp(posY))
-                {
-                    return (posX, posY);
-                }
-
-                // don't allow this at the end of an odd row
-                if (posY % 2 != 0 && !CanMoveRight(posX))
-                {
-                    return (posX, posY);
-                }
+                return (posX, posY);
             }
 
-            posY = MoveUpAndWrap(posY);
-
-            if (posY % 2 == 0)
-            {
-                posX = MoveRightAndWrap(posX);
-            }
-
-            return (posX, posY);
+            return (MoveRightAndWrap(posX, false), MoveUpAndWrap(posY));
         }
 
-        public bool CanMoveRight(int posX) => posX < Width - 1;
+        public bool CanMoveRight(int posX, bool doubleWidth) => posX < Width - (doubleWidth ? 2 : 1);
 
-        public bool CanMoveDownRight(int posX, int posY)
-        {
-            // can always move down-right in an even row
-            return CanMoveDown(posY) && (posY % 2 == 0 || CanMoveRight(posX));
-        }
+        public bool CanMoveLeft(int posX, bool doubleWidth) => posX > (doubleWidth ? 1 : 0);
 
-        public bool CanMoveDownLeft(int posX, int posY)
-        {
-            // can always move down-left in an odd row
-            return CanMoveDown(posY) && (posY % 2 != 0 || CanMoveLeft(posX));
-        }
+        public bool CanMoveDownRight(int posX, int posY) => CanMoveDown(posY) && CanMoveRight(posX, false);
 
-        public bool CanMoveLeft(int posX) => posX > 0;
+        public bool CanMoveDownLeft(int posX, int posY) => CanMoveDown(posY) && CanMoveLeft(posX, false);
 
-        public bool CanMoveUpLeft(int posX, int posY)
-        {
-            // can always move up-left in an odd row
-            return CanMoveUp(posY) && (posY % 2 != 0 || CanMoveLeft(posX));
-        }
+        public bool CanMoveUpLeft(int posX, int posY) => CanMoveUp(posY) && CanMoveLeft(posX, false);
 
-        public bool CanMoveUpRight(int posX, int posY)
-        {
-            // can always move up-right in an even row
-            return CanMoveUp(posY) && (posY % 2 == 0 || CanMoveRight(posX));
-        }
+        public bool CanMoveUpRight(int posX, int posY) => CanMoveUp(posY) && CanMoveRight(posX, false);
 
         private bool CanMoveDown(int posY) => posY < Height - 1;
 
         private bool CanMoveUp(int posY) => posY > 0;
 
-        private int MoveRightAndWrap(int posX)
+        private int MoveRightAndWrap(int posX, bool doubleWidth)
         {
-            var newPos = posX + 1;
+            var newPos = doubleWidth ? posX + 2 : posX + 1;
 
-            if (CanMoveRight(posX))
+            if (CanMoveRight(posX, doubleWidth))
             {
                 return newPos;
             }
@@ -207,11 +117,11 @@
             return WrapMovement ? newPos % Height : posY;
         }
 
-        private int MoveLeftAndWrap(int posX)
+        private int MoveLeftAndWrap(int posX, bool doubleWidth)
         {
-            var newPos = posX - 1;
+            var newPos = doubleWidth ? posX - 2 : posX - 1;
 
-            if (CanMoveLeft(posX))
+            if (CanMoveLeft(posX, doubleWidth))
             {
                 return newPos;
             }
