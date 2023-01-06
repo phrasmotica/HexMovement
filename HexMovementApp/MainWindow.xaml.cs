@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -16,6 +17,10 @@ namespace HexMovementApp
 
         private readonly List<List<Rectangle>> _tiles;
 
+        public event Action<Player> OnMove;
+
+        public event Action<bool> OnToggleWrapMovement;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -24,7 +29,17 @@ namespace HexMovementApp
             _player = new();
             _tiles = new();
 
+            OnMove += player =>
+            {
+                FillCurrentCell();
+                UpdatePlayerPositionLabel();
+                UpdateButtonStates();
+            };
+
+            OnToggleWrapMovement += shouldWrap => UpdateButtonStates();
+
             DrawGrid();
+            UpdateButtonStates();
         }
 
         private void DrawGrid()
@@ -72,54 +87,42 @@ namespace HexMovementApp
         {
             ClearCurrentCell();
             (_player.PosX, _player.PosY) = _hexGrid.MoveLeft(_player.PosX, _player.PosY);
-            FillCurrentCell();
-
-            UpdatePlayerPositionLabel();
+            OnMove(_player);
         }
 
         private void ButtonUpLeft_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
             (_player.PosX, _player.PosY) = _hexGrid.MoveUpLeft(_player.PosX, _player.PosY);
-            FillCurrentCell();
-
-            UpdatePlayerPositionLabel();
+            OnMove(_player);
         }
 
         private void ButtonUpRight_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
             (_player.PosX, _player.PosY) = _hexGrid.MoveUpRight(_player.PosX, _player.PosY);
-            FillCurrentCell();
-
-            UpdatePlayerPositionLabel();
+            OnMove(_player);
         }
 
         private void ButtonRight_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
             (_player.PosX, _player.PosY) = _hexGrid.MoveRight(_player.PosX, _player.PosY);
-            FillCurrentCell();
-
-            UpdatePlayerPositionLabel();
+            OnMove(_player);
         }
 
         private void ButtonDownRight_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
             (_player.PosX, _player.PosY) = _hexGrid.MoveDownRight(_player.PosX, _player.PosY);
-            FillCurrentCell();
-
-            UpdatePlayerPositionLabel();
+            OnMove(_player);
         }
 
         private void ButtonDownLeft_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
             (_player.PosX, _player.PosY) = _hexGrid.MoveDownLeft(_player.PosX, _player.PosY);
-            FillCurrentCell();
-
-            UpdatePlayerPositionLabel();
+            OnMove(_player);
         }
 
         private void ClearCurrentCell()
@@ -137,8 +140,26 @@ namespace HexMovementApp
             positionText.Content = $"Player position: ({_player.PosX}, {_player.PosY})";
         }
 
-        private void SetWrapOn(object sender, RoutedEventArgs e) => _hexGrid.WrapMovement = true;
+        private void UpdateButtonStates()
+        {
+            buttonRight.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveRight(_player.PosX);
+            buttonDownRight.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveDownRight(_player.PosX, _player.PosY);
+            buttonDownLeft.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveDownLeft(_player.PosX, _player.PosY);
+            buttonLeft.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveLeft(_player.PosX);
+            buttonUpLeft.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveUpLeft(_player.PosX, _player.PosY);
+            buttonUpRight.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveUpRight(_player.PosX, _player.PosY);
+        }
 
-        private void SetWrapOff(object sender, RoutedEventArgs e) => _hexGrid.WrapMovement = false;
+        private void SetWrapOn(object sender, RoutedEventArgs e)
+        {
+            _hexGrid.WrapMovement = true;
+            OnToggleWrapMovement(true);
+        }
+
+        private void SetWrapOff(object sender, RoutedEventArgs e)
+        {
+            _hexGrid.WrapMovement = false;
+            OnToggleWrapMovement(false);
+        }
     }
 }

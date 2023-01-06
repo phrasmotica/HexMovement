@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Headers;
-
-namespace HexGrid
+﻿namespace HexGrid
 {
     /// <summary>
     /// Represents a hexagonal grid in which something can be positioned.
@@ -155,11 +153,35 @@ namespace HexGrid
 
         public bool CanMoveRight(int posX) => posX < Width - 1;
 
-        public bool CanMoveDown(int posY) => posY < Height - 1;
+        public bool CanMoveDownRight(int posX, int posY)
+        {
+            // can always move down-right in an even row
+            return CanMoveDown(posY) && (posY % 2 == 0 || CanMoveRight(posX));
+        }
+
+        public bool CanMoveDownLeft(int posX, int posY)
+        {
+            // can always move down-left in an odd row
+            return CanMoveDown(posY) && (posY % 2 != 0 || CanMoveLeft(posX));
+        }
 
         public bool CanMoveLeft(int posX) => posX > 0;
 
-        public bool CanMoveUp(int posY) => posY > 0;
+        public bool CanMoveUpLeft(int posX, int posY)
+        {
+            // can always move up-left in an odd row
+            return CanMoveUp(posY) && (posY % 2 != 0 || CanMoveLeft(posX));
+        }
+
+        public bool CanMoveUpRight(int posX, int posY)
+        {
+            // can always move up-right in an even row
+            return CanMoveUp(posY) && (posY % 2 == 0 || CanMoveRight(posX));
+        }
+
+        private bool CanMoveDown(int posY) => posY < Height - 1;
+
+        private bool CanMoveUp(int posY) => posY > 0;
 
         private int MoveRightAndWrap(int posX)
         {
