@@ -10,5 +10,9 @@
         <TabItem Header="Movement">
             <control:MovementHexGrid />
         </TabItem>
+
+        <TabItem Header="Distance">
+            <control:DistanceHexGrid />
+        </TabItem>
     </TabControl>
 </Window>
