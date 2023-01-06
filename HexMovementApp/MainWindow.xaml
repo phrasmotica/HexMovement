@@ -11,13 +11,27 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Column="1" Content="Up-Left" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,97,0,0" Width="80" Height="80" Click="ButtonUpLeft_Click" />
-        <Button Grid.Column="1" Content="Up-Right" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="200,97,0,0" Width="80" Height="80" Click="ButtonUpRight_Click" />
-        <Button Grid.Column="1" Content="Left" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="80,0,0,0" Width="80" Height="80" Click="ButtonLeft_Click" />
-        <CheckBox Grid.Column="1" Content="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="SetWrapOn" Unchecked="SetWrapOff"/>
-        <Button Grid.Column="1" Content="Right" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="240,0,0,0" Width="80" Height="80" Click="ButtonRight_Click" />
-        <Button Grid.Column="1" Content="Down-Left" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,257,0,0" Width="80" Height="80" Click="ButtonDownLeft_Click" />
-        <Button Grid.Column="1" Content="Down-Right" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="200,257,0,0" Width="80" Height="80" Click="ButtonDownRight_Click" />
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="120,97,0,0">
+            <Button Content="Up-Left" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonUpLeft_Click" />
+            <Button Content="Up-Right" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonUpRight_Click" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="80,177,0,0">
+            <Button Content="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonLeft_Click" />
+
+            <CheckBox Content="Wrap"
+                      HorizontalAlignment="Left" VerticalAlignment="Top"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                      Width="48" Height="80" Margin="16,0"
+                      Checked="SetWrapOn" Unchecked="SetWrapOff" />
+
+            <Button Content="Right" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonRight_Click" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="120,257,0,0">
+            <Button Content="Down-Left" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonDownLeft_Click" />
+            <Button Content="Down-Right" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonDownRight_Click" />
+        </StackPanel>
 
         <StackPanel x:Name="rowsPanel">
             <StackPanel Orientation="Horizontal">
@@ -42,7 +56,7 @@
                 <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
             </StackPanel>
 
-            <Label Name="positionText" Content="Player position: (0, 0)" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24"/>
+            <Label Name="positionText" Content="Player position: (0, 0)" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24" />
         </StackPanel>
     </Grid>
 </Window>
