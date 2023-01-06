@@ -36,6 +36,21 @@
             }
         }
 
+        public List<Hex> GetNeighbours(int posX, int posY)
+        {
+            var coords = new[]
+            {
+                (posX - 1, posY - 1), (posX + 1, posY - 1), // row above
+                (posX - 2, posY), (posX + 2, posY), // this row
+                (posX - 1, posY + 1), (posX + 1, posY + 1), // row below
+            }
+            // filter to only those hexes that are in the grid
+            .Where(c => c.Item2 >= 0 && c.Item2 < Height && c.Item1 >= 0 && (c.Item1 / 2) < Rows[c.Item2].Count)
+            .ToList();
+
+            return coords.Select(c => Rows[c.Item2][c.Item1 / 2]).ToList();
+        }
+
         public (int, int) MoveRight(int posX, int posY) => (MoveRightAndWrap(posX, true), posY);
 
         public (int, int) MoveDownRight(int posX, int posY)

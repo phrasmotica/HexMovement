@@ -14,5 +14,9 @@
         <TabItem Header="Distance">
             <control:DistanceHexGrid />
         </TabItem>
+
+        <TabItem Header="Neighbours">
+            <control:NeighboursHexGrid />
+        </TabItem>
     </TabControl>
 </Window>
