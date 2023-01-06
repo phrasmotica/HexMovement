@@ -11,7 +11,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <StackPanel x:Name="rowsPanel">
+        <StackPanel x:Name="rowsPanel" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <Button Width="40" Height="40" />
                 <Button Width="40" Height="40" Margin="6,0,0,0" />

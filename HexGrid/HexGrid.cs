@@ -20,13 +20,16 @@
 
             Rows = new();
 
-            for (var i = 0; i < height; i++)
+            for (var y = 0; y < height; y++)
             {
                 var row = new List<Hex>();
 
-                for (var j = 0; j < width; j++)
+                // odd rows start at X = 1
+                var startX = y % 2 != 0 ? 1 : 0;
+
+                for (var x = startX; x < width; x += 2)
                 {
-                    row.Add(new());
+                    row.Add(new(y, x));
                 }
 
                 Rows.Add(row);

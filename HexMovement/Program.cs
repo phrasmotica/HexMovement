@@ -16,7 +16,7 @@ static string ToString(HexGrid.HexGrid hexGrid, Player player)
 
 static string RowToString(List<Hex> hexes, int row, Player player)
 {
-    var joined = string.Join(" ", hexes.Select((h, col) => HexToString(row, col, player)));
+    var joined = string.Join(" ", hexes.Select(h => HexToString(h, player)));
 
     if (row % 2 != 0)
     {
@@ -26,9 +26,9 @@ static string RowToString(List<Hex> hexes, int row, Player player)
     return joined;
 }
 
-static string HexToString(int row, int col, Player player)
+static string HexToString(HexGrid.Hex hex, Player player)
 {
-    return IsOccupied(row, col, player) ? "X" : ".";
+    return IsOccupied(hex.Row, hex.Col, player) ? "X" : ".";
 }
 
 static bool IsOccupied(int row, int col, Player player)

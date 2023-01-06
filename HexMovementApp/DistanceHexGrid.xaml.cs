@@ -11,9 +11,15 @@ namespace HexMovementApp
     /// </summary>
     public partial class DistanceHexGrid : UserControl
     {
+        private const int GridWidth = 14;
+        private const int GridHeight = 6;
+
+        private const int ButtonSize = 40;
+        private const int MarginSize = 6;
+
         private readonly HexGrid.HexGrid _hexGrid;
 
-        private readonly List<List<Button>> _tiles;
+        private readonly List<List<Button>> _tileRows;
 
         private int? _startX;
         private int? _startY;
@@ -28,11 +34,8 @@ namespace HexMovementApp
         {
             InitializeComponent();
 
-            var width = 14;
-            var height = 6;
-
-            _hexGrid = new(width, height);
-            _tiles = new();
+            _hexGrid = new(GridWidth, GridHeight);
+            _tileRows = new();
 
             OnChangeRoute += UpdateButtonStates;
             OnChangeRoute += UpdateDistance;
@@ -49,49 +52,46 @@ namespace HexMovementApp
             rowsPanel.Children.RemoveAt(0);
             rowsPanel.Children.RemoveAt(0);
 
-            for (var y = 0; y < _hexGrid.Height; y++)
+            for (var y = 0; y < _hexGrid.Rows.Count; y++)
             {
-                var rowTiles = new List<Button>();
+                var hexes = _hexGrid.Rows[y];
+
+                var row = new List<Button>();
 
                 var rowPanel = new StackPanel
                 {
                     Orientation = Orientation.Horizontal,
-                    Margin = new Thickness(y % 2 != 0 ? 23 : 0, y > 0 ? 6 : 0, 0, 0),
+                    Margin = new Thickness(y % 2 != 0 ? (ButtonSize + MarginSize) / 2 : 0, y > 0 ? MarginSize : 0, 0, 0),
                 };
 
-                // start rendering odd rows at X = 1
-                var startX = y % 2 != 0 ? 1 : 0;
-
-                for (var x = startX; x < _hexGrid.Width; x += 2)
+                for (var x = 0; x < hexes.Count; x++)
                 {
+                    var hex = hexes[x];
+
                     var button = new Button
                     {
-                        Width = 40,
-                        Height = 40,
-                        Margin = new Thickness(x > startX ? 6 : 0, 0, 0, 0),
-                        Content = $"({x}, {y})",
+                        Width = ButtonSize,
+                        Height = ButtonSize,
+                        Margin = new Thickness(x > 0 ? MarginSize : 0, 0, 0, 0),
+                        Content = $"({hex.Col}, {hex.Row})",
                     };
 
-                    // capture values of x and y
-                    var col = x;
-                    var row = y;
+                    button.Click += (sender, args) => SetRoute(hex.Col, hex.Row);
 
-                    button.Click += (sender, args) => SetRoute(col, row);
-
-                    rowTiles.Add(button);
+                    row.Add(button);
                     rowPanel.Children.Add(button);
                 }
 
-                _tiles.Add(rowTiles);
+                _tileRows.Add(row);
                 rowsPanel.Children.Add(rowPanel);
             }
         }
 
         private void UpdateButtonStates(int? startX, int? startY, int? endX, int? endY)
         {
-            for (var y = 0; y < _tiles.Count; y++)
+            for (var y = 0; y < _tileRows.Count; y++)
             {
-                var row = _tiles[y];
+                var row = _tileRows[y];
 
                 for (var x = 0; x < row.Count; x++)
                 {
@@ -117,7 +117,7 @@ namespace HexMovementApp
 
         private void ResetButtons()
         {
-            foreach (var row in _tiles)
+            foreach (var row in _tileRows)
             {
                 foreach (var button in row)
                 {

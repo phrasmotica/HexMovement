@@ -11,7 +11,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <StackPanel x:Name="rowsPanel">
+        <StackPanel x:Name="rowsPanel" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Label Name="positionText" Content="Player position: (0, 0)" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24" />
 
             <StackPanel Orientation="Horizontal">

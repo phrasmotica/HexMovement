@@ -12,10 +12,17 @@ namespace HexMovementApp
     /// </summary>
     public partial class MovementHexGrid : UserControl
     {
+        private const int GridWidth = 14;
+        private const int GridHeight = 6;
+
+        private const int CellSize = 40;
+        private const int MarginSize = 6;
+
         private readonly HexGrid.HexGrid _hexGrid;
+
         private readonly Player _player;
 
-        private readonly List<List<Rectangle>> _tiles;
+        private readonly List<List<Ellipse>> _tileRows;
 
         public event Action<Player> OnMove;
 
@@ -25,15 +32,12 @@ namespace HexMovementApp
         {
             InitializeComponent();
 
-            var width = 14;
-            var height = 6;
-
-            _hexGrid = new(width, height);
+            _hexGrid = new(GridWidth, GridHeight);
             _player = new();
-            _tiles = new();
+            _tileRows = new();
 
             // cannot wrap with an odd number of rows
-            wrapCheckbox.IsEnabled = height % 2 == 0;
+            wrapCheckbox.IsEnabled = GridHeight % 2 == 0;
 
             OnMove += player =>
             {
@@ -54,35 +58,34 @@ namespace HexMovementApp
             rowsPanel.Children.RemoveAt(rowsPanel.Children.Count - 1);
             rowsPanel.Children.RemoveAt(rowsPanel.Children.Count - 1);
 
-            for (var y = 0; y < _hexGrid.Height; y++)
+            for (var y = 0; y < _hexGrid.Rows.Count; y++)
             {
-                var rowTiles = new List<Rectangle>();
+                var hexes = _hexGrid.Rows[y];
+
+                var row = new List<Ellipse>();
 
                 var rowPanel = new StackPanel
                 {
                     Orientation = Orientation.Horizontal,
-                    Margin = new Thickness(y % 2 != 0 ? 23 : 0, y > 0 ? 6 : 0, 0, 0),
+                    Margin = new Thickness(y % 2 != 0 ? (CellSize + MarginSize) / 2 : 0, y > 0 ? MarginSize : 0, 0, 0),
                 };
 
-                // start rendering odd rows at X = 1
-                var startX = y % 2 != 0 ? 1 : 0;
-
-                for (var x = startX; x < _hexGrid.Width; x += 2)
+                for (var x = 0; x < hexes.Count; x++)
                 {
-                    var cell = new Rectangle
+                    var cell = new Ellipse
                     {
-                        Width = 40,
-                        Height = 40,
+                        Width = CellSize,
+                        Height = CellSize,
                         Fill = new SolidColorBrush(IsOccupied(x, y) ? Colors.Crimson : Colors.AliceBlue),
                         Stroke = new SolidColorBrush(Colors.Black),
-                        Margin = new Thickness(x > startX ? 6 : 0, 0, 0, 0),
+                        Margin = new Thickness(x > 0 ? MarginSize : 0, 0, 0, 0),
                     };
 
-                    rowTiles.Add(cell);
+                    row.Add(cell);
                     rowPanel.Children.Add(cell);
                 }
 
-                _tiles.Add(rowTiles);
+                _tileRows.Add(row);
                 rowsPanel.Children.Add(rowPanel);
             }
         }
@@ -136,13 +139,13 @@ namespace HexMovementApp
 
         private void ClearCurrentCell()
         {
-            var currentCell = _tiles[_player.PosY][_player.PosX / 2];
+            var currentCell = _tileRows[_player.PosY][_player.PosX / 2];
             currentCell.Fill = new SolidColorBrush(Colors.AliceBlue);
         }
 
         private void FillCurrentCell()
         {
-            var currentCell = _tiles[_player.PosY][_player.PosX / 2];
+            var currentCell = _tileRows[_player.PosY][_player.PosX / 2];
             currentCell.Fill = new SolidColorBrush(Colors.Crimson);
         }
 
