@@ -100,45 +100,45 @@ namespace HexMovementApp
 
         private bool IsOccupied(Hex hex) => _player.Hex == hex;
 
-        private void ButtonLeft_Click(object sender, RoutedEventArgs e)
+        private void ButtonWest_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
-            _player.Hex = _hexGrid.MoveLeft(_player.Hex!);
+            _player.Hex = _hexGrid.MoveWest(_player.Hex!);
             OnMove(_player);
         }
 
-        private void ButtonUpLeft_Click(object sender, RoutedEventArgs e)
+        private void ButtonNorthWest_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
-            _player.Hex = _hexGrid.MoveUpLeft(_player.Hex!);
+            _player.Hex = _hexGrid.MoveNorthWest(_player.Hex!);
             OnMove(_player);
         }
 
-        private void ButtonUpRight_Click(object sender, RoutedEventArgs e)
+        private void ButtonNorthEast_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
-            _player.Hex = _hexGrid.MoveUpRight(_player.Hex!);
+            _player.Hex = _hexGrid.MoveNorthEast(_player.Hex!);
             OnMove(_player);
         }
 
-        private void ButtonRight_Click(object sender, RoutedEventArgs e)
+        private void ButtonEast_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
-            _player.Hex = _hexGrid.MoveRight(_player.Hex!);
+            _player.Hex = _hexGrid.MoveEast(_player.Hex!);
             OnMove(_player);
         }
 
-        private void ButtonDownRight_Click(object sender, RoutedEventArgs e)
+        private void ButtonSouthEast_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
-            _player.Hex = _hexGrid.MoveDownRight(_player.Hex!);
+            _player.Hex = _hexGrid.MoveSouthEast(_player.Hex!);
             OnMove(_player);
         }
 
-        private void ButtonDownLeft_Click(object sender, RoutedEventArgs e)
+        private void ButtonSouthWest_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
-            _player.Hex = _hexGrid.MoveDownLeft(_player.Hex!);
+            _player.Hex = _hexGrid.MoveSouthWest(_player.Hex!);
             OnMove(_player);
         }
 
@@ -161,12 +161,12 @@ namespace HexMovementApp
 
         private void UpdateButtonStates()
         {
-            buttonRight.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveRight(_player.Hex!, true);
-            buttonDownRight.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveDownRight(_player.Hex!);
-            buttonDownLeft.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveDownLeft(_player.Hex!);
-            buttonLeft.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveLeft(_player.Hex!, true);
-            buttonUpLeft.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveUpLeft(_player.Hex!);
-            buttonUpRight.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveUpRight(_player.Hex!);
+            buttonEast.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveEast(_player.Hex!, true);
+            buttonSouthEast.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveSouthEast(_player.Hex!);
+            buttonSouthWest.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveSouthWest(_player.Hex!);
+            buttonWest.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveWest(_player.Hex!, true);
+            buttonNorthWest.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveNorthWest(_player.Hex!);
+            buttonNorthEast.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveNorthEast(_player.Hex!);
         }
 
         private void SetWrapOn(object sender, RoutedEventArgs e)

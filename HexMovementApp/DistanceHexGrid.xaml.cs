@@ -103,6 +103,8 @@ namespace HexMovementApp
 
         private void UpdateDistance(Hex? start, Hex? end)
         {
+            // TODO: allow wrapping
+
             if (start is not null && end is not null)
             {
                 var distance = HexGridDistance.ComputeDistanceDoubleWidth(start, end);

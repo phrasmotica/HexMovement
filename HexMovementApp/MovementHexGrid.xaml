@@ -37,12 +37,12 @@
 
         <StackPanel x:Name="buttonsPanel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal" Margin="40,0,0,0">
-                <Button x:Name="buttonUpLeft" Content="Up-Left" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonUpLeft_Click" />
-                <Button x:Name="buttonUpRight" Content="Up-Right" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonUpRight_Click" />
+                <Button x:Name="buttonNorthWest" Content="North-West" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonNorthWest_Click" />
+                <Button x:Name="buttonNorthEast" Content="North-East" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonNorthEast_Click" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="buttonLeft" Content="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonLeft_Click" />
+                <Button x:Name="buttonWest" Content="West" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonWest_Click" />
 
                 <CheckBox x:Name="wrapCheckbox" Content="Wrap"
                           HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -50,12 +50,12 @@
                           Width="48" Height="80" Margin="16,0"
                           Checked="SetWrapOn" Unchecked="SetWrapOff" />
 
-                <Button x:Name="buttonRight" Content="Right" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonRight_Click" />
+                <Button x:Name="buttonEast" Content="East" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonEast_Click" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="40,0,0,0">
-                <Button x:Name="buttonDownLeft" Content="Down-Left" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonDownLeft_Click" />
-                <Button x:Name="buttonDownRight" Content="Down-Right" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonDownRight_Click" />
+                <Button x:Name="buttonSouthWest" Content="South-West" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonSouthWest_Click" />
+                <Button x:Name="buttonSouthEast" Content="South-East" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="80" Click="ButtonSouthEast_Click" />
             </StackPanel>
         </StackPanel>
     </Grid>

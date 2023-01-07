@@ -61,11 +61,11 @@
             return coords.Select(c => HexAt(c.Item2, c.Item1)).ToList();
         }
 
-        public Hex MoveRight(Hex hex) => HexAt(hex.Row, GetNextCol(hex, true));
+        public Hex MoveEast(Hex hex) => HexAt(hex.Row, GetNextCol(hex, true));
 
-        public Hex MoveDownRight(Hex hex)
+        public Hex MoveSouthEast(Hex hex)
         {
-            if (!WrapMovement && !CanMoveDownRight(hex))
+            if (!WrapMovement && !CanMoveSouthEast(hex))
             {
                 return hex;
             }
@@ -73,9 +73,9 @@
             return HexAt(GetNextRow(hex), GetNextCol(hex, false));
         }
 
-        public Hex MoveDownLeft(Hex hex)
+        public Hex MoveSouthWest(Hex hex)
         {
-            if (!WrapMovement && !CanMoveDownLeft(hex))
+            if (!WrapMovement && !CanMoveSouthWest(hex))
             {
                 return hex;
             }
@@ -83,11 +83,11 @@
             return HexAt(GetNextRow(hex), GetPreviousCol(hex, false));
         }
 
-        public Hex MoveLeft(Hex hex) => HexAt(hex.Row, GetPreviousCol(hex, true));
+        public Hex MoveWest(Hex hex) => HexAt(hex.Row, GetPreviousCol(hex, true));
 
-        public Hex MoveUpLeft(Hex hex)
+        public Hex MoveNorthWest(Hex hex)
         {
-            if (!WrapMovement && !CanMoveUpLeft(hex))
+            if (!WrapMovement && !CanMoveNorthWest(hex))
             {
                 return hex;
             }
@@ -95,9 +95,9 @@
             return HexAt(GetPreviousRow(hex), GetPreviousCol(hex, false));
         }
 
-        public Hex MoveUpRight(Hex hex)
+        public Hex MoveNorthEast(Hex hex)
         {
-            if (!WrapMovement && !CanMoveUpRight(hex))
+            if (!WrapMovement && !CanMoveNorthEast(hex))
             {
                 return hex;
             }
@@ -105,17 +105,17 @@
             return HexAt(GetPreviousRow(hex), GetNextCol(hex, false));
         }
 
-        public bool CanMoveRight(Hex hex, bool doubleWidth) => hex.Col < Width - (doubleWidth ? 2 : 1);
+        public bool CanMoveEast(Hex hex, bool doubleWidth) => hex.Col < Width - (doubleWidth ? 2 : 1);
 
-        public bool CanMoveLeft(Hex hex, bool doubleWidth) => hex.Col > (doubleWidth ? 1 : 0);
+        public bool CanMoveWest(Hex hex, bool doubleWidth) => hex.Col > (doubleWidth ? 1 : 0);
 
-        public bool CanMoveDownRight(Hex hex) => CanMoveDown(hex) && CanMoveRight(hex, false);
+        public bool CanMoveSouthEast(Hex hex) => CanMoveDown(hex) && CanMoveEast(hex, false);
 
-        public bool CanMoveDownLeft(Hex hex) => CanMoveDown(hex) && CanMoveLeft(hex, false);
+        public bool CanMoveSouthWest(Hex hex) => CanMoveDown(hex) && CanMoveWest(hex, false);
 
-        public bool CanMoveUpLeft(Hex hex) => CanMoveUp(hex) && CanMoveLeft(hex, false);
+        public bool CanMoveNorthWest(Hex hex) => CanMoveUp(hex) && CanMoveWest(hex, false);
 
-        public bool CanMoveUpRight(Hex hex) => CanMoveUp(hex) && CanMoveRight(hex, false);
+        public bool CanMoveNorthEast(Hex hex) => CanMoveUp(hex) && CanMoveEast(hex, false);
 
         private bool CanMoveDown(Hex hex) => hex.Row < Height - 1;
 
@@ -125,7 +125,7 @@
         {
             var newCol = doubleWidth ? hex.Col + 2 : hex.Col + 1;
 
-            if (CanMoveRight(hex, doubleWidth))
+            if (CanMoveEast(hex, doubleWidth))
             {
                 return newCol;
             }
@@ -149,7 +149,7 @@
         {
             var newCol = doubleWidth ? hex.Col - 2 : hex.Col - 1;
 
-            if (CanMoveLeft(hex, doubleWidth))
+            if (CanMoveWest(hex, doubleWidth))
             {
                 return newCol;
             }

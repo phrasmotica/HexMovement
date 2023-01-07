@@ -40,12 +40,12 @@ static void ToggleWrapMovement(HexGrid.HexGrid hexGrid)
 
 static void PrintHelp()
 {
-    Console.WriteLine("Move right: r");
-    Console.WriteLine("Move down-right: dr");
-    Console.WriteLine("Move down-left: dl");
-    Console.WriteLine("Move left: l");
-    Console.WriteLine("Move up-left: ul");
-    Console.WriteLine("Move up-right: ur");
+    Console.WriteLine("Move east: e");
+    Console.WriteLine("Move south-east: se");
+    Console.WriteLine("Move south-west: sw");
+    Console.WriteLine("Move west: w");
+    Console.WriteLine("Move north-west: nw");
+    Console.WriteLine("Move north-east: ne");
     Console.WriteLine("Toggle grid wrapping: wrap");
     Console.WriteLine("Quit: q");
     Console.WriteLine();
@@ -76,39 +76,39 @@ do
         PrintHelp();
     }
 
-    if (input == "r")
+    if (input == "e")
     {
-        player.Hex = hexGrid.MoveRight(player.Hex!);
+        player.Hex = hexGrid.MoveEast(player.Hex!);
         PrintHexGrid(hexGrid, player);
     }
 
-    if (input == "dr")
+    if (input == "se")
     {
-        player.Hex = hexGrid.MoveDownRight(player.Hex!);
+        player.Hex = hexGrid.MoveSouthEast(player.Hex!);
         PrintHexGrid(hexGrid, player);
     }
 
-    if (input == "dl")
+    if (input == "sw")
     {
-        player.Hex = hexGrid.MoveDownLeft(player.Hex!);
+        player.Hex = hexGrid.MoveSouthWest(player.Hex!);
         PrintHexGrid(hexGrid, player);
     }
 
-    if (input == "l")
+    if (input == "w")
     {
-        player.Hex = hexGrid.MoveLeft(player.Hex!);
+        player.Hex = hexGrid.MoveWest(player.Hex!);
         PrintHexGrid(hexGrid, player);
     }
 
-    if (input == "ul")
+    if (input == "nw")
     {
-        player.Hex = hexGrid.MoveUpLeft(player.Hex!);
+        player.Hex = hexGrid.MoveNorthWest(player.Hex!);
         PrintHexGrid(hexGrid, player);
     }
 
-    if (input == "ur")
+    if (input == "ne")
     {
-        player.Hex = hexGrid.MoveUpRight(player.Hex!);
+        player.Hex = hexGrid.MoveNorthEast(player.Hex!);
         PrintHexGrid(hexGrid, player);
     }
 
