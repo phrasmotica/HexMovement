@@ -36,19 +36,27 @@
             }
         }
 
+        /// <summary>
+        /// Returns the hex in the given row and column. Column needs to be halved because of
+        /// double-width coordinate system.
+        /// </summary>
+        public Hex HexAt(int row, int col) => Rows[(row + Height) % Height][(col + Width) % Width / 2];
+
         public List<Hex> GetNeighbours(Hex hex)
         {
-            // TODO: support wrapping
-
             var coords = new[]
             {
                 (hex.Col - 1, hex.Row - 1), (hex.Col + 1, hex.Row - 1), // row above
                 (hex.Col - 2, hex.Row), (hex.Col + 2, hex.Row), // this row
                 (hex.Col - 1, hex.Row + 1), (hex.Col + 1, hex.Row + 1), // row below
-            }
-            // filter to only those hexes that are in the grid
-            .Where(c => c.Item2 >= 0 && c.Item2 < Height && c.Item1 >= 0 && (c.Item1 / 2) < Rows[c.Item2].Count)
-            .ToList();
+            };
+
+            if (!WrapMovement)
+            {
+                // filter to only coordinates that are inside the grid, i.e. nothing out of range
+                coords = coords.Where(c => c.Item2 >= 0 && c.Item2 < Height && c.Item1 >= 0 && (c.Item1 / 2) < Rows[c.Item2].Count)
+                               .ToArray();
+            };
 
             return coords.Select(c => HexAt(c.Item2, c.Item1)).ToList();
         }
@@ -108,12 +116,6 @@
         public bool CanMoveUpLeft(Hex hex) => CanMoveUp(hex) && CanMoveLeft(hex, false);
 
         public bool CanMoveUpRight(Hex hex) => CanMoveUp(hex) && CanMoveRight(hex, false);
-
-        /// <summary>
-        /// Returns the hex in the given row and column. Column needs to be halved because of
-        /// double-width coordinate system.
-        /// </summary>
-        public Hex HexAt(int row, int col) => Rows[row][col / 2];
 
         private bool CanMoveDown(Hex hex) => hex.Row < Height - 1;
 

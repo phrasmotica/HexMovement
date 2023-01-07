@@ -36,7 +36,13 @@
 
         <StackPanel x:Name="neighboursButtonsPanel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Label Name="neighboursText" Content="# of neighbours: ?" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24" />
-            <Button x:Name="resetButton" Content="Reset" Click="ButtonReset_Click" FontSize="24" />
+
+            <CheckBox x:Name="wrapCheckbox" Content="Wrap"
+                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                      Checked="SetWrapOn" Unchecked="SetWrapOff" />
+
+            <Button x:Name="resetButton" Content="Reset" Margin="0,6,0,0" Click="ButtonReset_Click" FontSize="24" />
         </StackPanel>
     </Grid>
 </UserControl>
