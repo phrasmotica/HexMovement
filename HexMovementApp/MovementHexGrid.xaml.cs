@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HexGrid;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,7 +34,12 @@ namespace HexMovementApp
             InitializeComponent();
 
             _hexGrid = new(GridWidth, GridHeight);
-            _player = new();
+            
+            _player = new()
+            {
+                Hex = _hexGrid.HexAt(0, 0),
+            };
+
             _tileRows = new();
 
             // cannot wrap with an odd number of rows
@@ -72,11 +78,13 @@ namespace HexMovementApp
 
                 for (var x = 0; x < hexes.Count; x++)
                 {
+                    var hex = hexes[x];
+
                     var cell = new Ellipse
                     {
                         Width = CellSize,
                         Height = CellSize,
-                        Fill = new SolidColorBrush(IsOccupied(x, y) ? Colors.Crimson : Colors.AliceBlue),
+                        Fill = new SolidColorBrush(IsOccupied(hex) ? Colors.Crimson : Colors.AliceBlue),
                         Stroke = new SolidColorBrush(Colors.Black),
                         Margin = new Thickness(x > 0 ? MarginSize : 0, 0, 0, 0),
                     };
@@ -90,78 +98,75 @@ namespace HexMovementApp
             }
         }
 
-        private bool IsOccupied(int row, int col)
-        {
-            return _player.PosX == row && _player.PosY == col;
-        }
+        private bool IsOccupied(Hex hex) => _player.Hex == hex;
 
         private void ButtonLeft_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
-            (_player.PosX, _player.PosY) = _hexGrid.MoveLeft(_player.PosX, _player.PosY);
+            _player.Hex = _hexGrid.MoveLeft(_player.Hex!);
             OnMove(_player);
         }
 
         private void ButtonUpLeft_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
-            (_player.PosX, _player.PosY) = _hexGrid.MoveUpLeft(_player.PosX, _player.PosY);
+            _player.Hex = _hexGrid.MoveUpLeft(_player.Hex!);
             OnMove(_player);
         }
 
         private void ButtonUpRight_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
-            (_player.PosX, _player.PosY) = _hexGrid.MoveUpRight(_player.PosX, _player.PosY);
+            _player.Hex = _hexGrid.MoveUpRight(_player.Hex!);
             OnMove(_player);
         }
 
         private void ButtonRight_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
-            (_player.PosX, _player.PosY) = _hexGrid.MoveRight(_player.PosX, _player.PosY);
+            _player.Hex = _hexGrid.MoveRight(_player.Hex!);
             OnMove(_player);
         }
 
         private void ButtonDownRight_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
-            (_player.PosX, _player.PosY) = _hexGrid.MoveDownRight(_player.PosX, _player.PosY);
+            _player.Hex = _hexGrid.MoveDownRight(_player.Hex!);
             OnMove(_player);
         }
 
         private void ButtonDownLeft_Click(object sender, RoutedEventArgs e)
         {
             ClearCurrentCell();
-            (_player.PosX, _player.PosY) = _hexGrid.MoveDownLeft(_player.PosX, _player.PosY);
+            _player.Hex = _hexGrid.MoveDownLeft(_player.Hex!);
             OnMove(_player);
         }
 
         private void ClearCurrentCell()
         {
-            var currentCell = _tileRows[_player.PosY][_player.PosX / 2];
+            var currentCell = _tileRows[_player.Hex!.Row][_player.Hex!.Col / 2];
             currentCell.Fill = new SolidColorBrush(Colors.AliceBlue);
         }
 
         private void FillCurrentCell()
         {
-            var currentCell = _tileRows[_player.PosY][_player.PosX / 2];
+            var currentCell = _tileRows[_player.Hex!.Row][_player.Hex!.Col / 2];
             currentCell.Fill = new SolidColorBrush(Colors.Crimson);
         }
 
         private void UpdatePlayerPositionLabel()
         {
-            positionText.Content = $"Player position: ({_player.PosX}, {_player.PosY})";
+            positionText.Content = $"Player position: ({_player.Hex!.Col}, {_player.Hex!.Row})";
         }
 
         private void UpdateButtonStates()
         {
-            buttonRight.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveRight(_player.PosX, true);
-            buttonDownRight.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveDownRight(_player.PosX, _player.PosY);
-            buttonDownLeft.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveDownLeft(_player.PosX, _player.PosY);
-            buttonLeft.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveLeft(_player.PosX, true);
-            buttonUpLeft.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveUpLeft(_player.PosX, _player.PosY);
-            buttonUpRight.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveUpRight(_player.PosX, _player.PosY);
+            buttonRight.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveRight(_player.Hex!, true);
+            buttonDownRight.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveDownRight(_player.Hex!);
+            buttonDownLeft.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveDownLeft(_player.Hex!);
+            buttonLeft.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveLeft(_player.Hex!, true);
+            buttonUpLeft.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveUpLeft(_player.Hex!);
+            buttonUpRight.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveUpRight(_player.Hex!);
         }
 
         private void SetWrapOn(object sender, RoutedEventArgs e)

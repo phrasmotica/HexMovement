@@ -1,9 +1,9 @@
-﻿namespace HexGridConsole
+﻿using HexGrid;
+
+namespace HexGridConsole
 {
     public class Player
     {
-        public int PosX { get; set; }
-
-        public int PosY { get; set; }
+        public Hex? Hex { get; set; }
     }
 }

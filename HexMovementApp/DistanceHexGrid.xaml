@@ -34,7 +34,7 @@
         </StackPanel>
 
         <StackPanel x:Name="distanceButtonsPanel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Label Name="distanceText" Content="Distance: ?" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24" />
+            <Label Name="distanceText" Content="Distance: ? tile(s)" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24" />
             <Button x:Name="resetButton" Content="Reset" Click="ButtonReset_Click" FontSize="24" />
         </StackPanel>
     </Grid>

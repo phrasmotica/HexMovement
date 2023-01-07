@@ -21,12 +21,11 @@ namespace HexMovementApp
 
         private readonly List<List<Button>> _tileRows;
 
-        private int? _startX;
-        private int? _startY;
-        private int? _endX;
-        private int? _endY;
+        private Hex? _start;
+        private Hex? _end;
+        private bool _setEnd;
 
-        public event Action<int?, int?, int?, int?> OnChangeRoute;
+        public event Action<Hex?, Hex?> OnChangeRoute;
 
         public event Action OnReset;
 
@@ -41,7 +40,7 @@ namespace HexMovementApp
             OnChangeRoute += UpdateDistance;
 
             OnReset += ResetButtons;
-            OnReset += () => UpdateDistance(null, null, null, null);
+            OnReset += () => UpdateDistance(null, null);
 
             DrawGrid();
         }
@@ -76,7 +75,7 @@ namespace HexMovementApp
                         Content = $"({hex.Col}, {hex.Row})",
                     };
 
-                    button.Click += (sender, args) => SetRoute(hex.Col, hex.Row);
+                    button.Click += (sender, args) => SetRoute(hex);
 
                     row.Add(button);
                     rowPanel.Children.Add(button);
@@ -87,7 +86,7 @@ namespace HexMovementApp
             }
         }
 
-        private void UpdateButtonStates(int? startX, int? startY, int? endX, int? endY)
+        private void UpdateButtonStates(Hex? start, Hex? end)
         {
             for (var y = 0; y < _tileRows.Count; y++)
             {
@@ -97,21 +96,21 @@ namespace HexMovementApp
                 {
                     var button = row[x];
 
-                    button.IsEnabled = !((x == (startX / 2) && y == startY) || (x == (endX / 2) && y == endY));
+                    button.IsEnabled = !((x == (start?.Col / 2) && y == start?.Row) || (x == (end?.Col / 2) && y == end?.Row));
                 }
             }
         }
 
-        private void UpdateDistance(int? startX, int? startY, int? endX, int? endY)
+        private void UpdateDistance(Hex? start, Hex? end)
         {
-            if (startX.HasValue && startY.HasValue && endX.HasValue && endY.HasValue)
+            if (start is not null && end is not null)
             {
-                var distance = HexGridDistance.ComputeDistanceDoubleWidth(startX.Value, startY.Value, endX.Value, endY.Value);
+                var distance = HexGridDistance.ComputeDistanceDoubleWidth(start, end);
                 distanceText.Content = $"Distance: {distance} tile(s)";
             }
             else
             {
-                distanceText.Content = "Distance: ?";
+                distanceText.Content = "Distance: ? tile(s)";
             }
         }
 
@@ -126,25 +125,25 @@ namespace HexMovementApp
             }
         }
 
-        private void SetRoute(int x, int y)
+        private void SetRoute(Hex hex)
         {
-            if (_startX is not null)
+            if (_setEnd)
             {
-                _endX = x;
-                _endY = y;
+                _end = hex;
+                _setEnd = false;
             }
             else
             {
-                _startX = x;
-                _startY = y;
+                _start = hex;
+                _setEnd = true;
             }
 
-            OnChangeRoute(_startX, _startY, _endX, _endY);
+            OnChangeRoute(_start, _end);
         }
 
         private void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
-            _startX = _startY = _endX = _endY = null;
+            _start = _end = null;
             OnReset();
         }
     }

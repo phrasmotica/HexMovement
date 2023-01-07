@@ -85,7 +85,7 @@ namespace HexMovementApp
 
             if (hex is not null)
             {
-                neighbours = _hexGrid.GetNeighbours(hex.Col, hex.Row);
+                neighbours = _hexGrid.GetNeighbours(hex);
             }
 
             for (var y = 0; y < _tileRows.Count; y++)
@@ -115,7 +115,7 @@ namespace HexMovementApp
         {
             if (hex is not null)
             {
-                var neighbours = _hexGrid.GetNeighbours(hex.Col, hex.Row);
+                var neighbours = _hexGrid.GetNeighbours(hex);
                 neighboursText.Content = $"# of neighbours: {neighbours.Count}";
             }
             else

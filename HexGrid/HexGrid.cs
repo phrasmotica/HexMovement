@@ -20,145 +20,153 @@
 
             Rows = new();
 
-            for (var y = 0; y < height; y++)
+            for (var row = 0; row < height; row++)
             {
-                var row = new List<Hex>();
+                var hexes = new List<Hex>();
 
-                // odd rows start at X = 1
-                var startX = y % 2 != 0 ? 1 : 0;
+                // odd rows start at column 1
+                var startCol = row % 2 != 0 ? 1 : 0;
 
-                for (var x = startX; x < width; x += 2)
+                for (var col = startCol; col < width; col += 2)
                 {
-                    row.Add(new(y, x));
+                    hexes.Add(new(row, col));
                 }
 
-                Rows.Add(row);
+                Rows.Add(hexes);
             }
         }
 
-        public List<Hex> GetNeighbours(int posX, int posY)
+        public List<Hex> GetNeighbours(Hex hex)
         {
+            // TODO: support wrapping
+
             var coords = new[]
             {
-                (posX - 1, posY - 1), (posX + 1, posY - 1), // row above
-                (posX - 2, posY), (posX + 2, posY), // this row
-                (posX - 1, posY + 1), (posX + 1, posY + 1), // row below
+                (hex.Col - 1, hex.Row - 1), (hex.Col + 1, hex.Row - 1), // row above
+                (hex.Col - 2, hex.Row), (hex.Col + 2, hex.Row), // this row
+                (hex.Col - 1, hex.Row + 1), (hex.Col + 1, hex.Row + 1), // row below
             }
             // filter to only those hexes that are in the grid
             .Where(c => c.Item2 >= 0 && c.Item2 < Height && c.Item1 >= 0 && (c.Item1 / 2) < Rows[c.Item2].Count)
             .ToList();
 
-            return coords.Select(c => Rows[c.Item2][c.Item1 / 2]).ToList();
+            return coords.Select(c => HexAt(c.Item2, c.Item1)).ToList();
         }
 
-        public (int, int) MoveRight(int posX, int posY) => (MoveRightAndWrap(posX, true), posY);
+        public Hex MoveRight(Hex hex) => HexAt(hex.Row, GetNextCol(hex, true));
 
-        public (int, int) MoveDownRight(int posX, int posY)
+        public Hex MoveDownRight(Hex hex)
         {
-            if (!WrapMovement && !CanMoveDownRight(posX, posY))
+            if (!WrapMovement && !CanMoveDownRight(hex))
             {
-                return (posX, posY);
+                return hex;
             }
 
-            return (MoveRightAndWrap(posX, false), MoveDownAndWrap(posY));
+            return HexAt(GetNextRow(hex), GetNextCol(hex, false));
         }
 
-        public (int, int) MoveDownLeft(int posX, int posY)
+        public Hex MoveDownLeft(Hex hex)
         {
-            if (!WrapMovement && !CanMoveDownLeft(posX, posY))
+            if (!WrapMovement && !CanMoveDownLeft(hex))
             {
-                return (posX, posY);
+                return hex;
             }
 
-            return (MoveLeftAndWrap(posX, false), MoveDownAndWrap(posY));
+            return HexAt(GetNextRow(hex), GetPreviousCol(hex, false));
         }
 
-        public (int, int) MoveLeft(int posX, int posY) => (MoveLeftAndWrap(posX, true), posY);
+        public Hex MoveLeft(Hex hex) => HexAt(hex.Row, GetPreviousCol(hex, true));
 
-        public (int, int) MoveUpLeft(int posX, int posY)
+        public Hex MoveUpLeft(Hex hex)
         {
-            if (!WrapMovement && !CanMoveUpLeft(posX, posY))
+            if (!WrapMovement && !CanMoveUpLeft(hex))
             {
-                return (posX, posY);
+                return hex;
             }
 
-            return (MoveLeftAndWrap(posX, false), MoveUpAndWrap(posY));
+            return HexAt(GetPreviousRow(hex), GetPreviousCol(hex, false));
         }
 
-        public (int, int) MoveUpRight(int posX, int posY)
+        public Hex MoveUpRight(Hex hex)
         {
-            if (!WrapMovement && !CanMoveUpRight(posX, posY))
+            if (!WrapMovement && !CanMoveUpRight(hex))
             {
-                return (posX, posY);
+                return hex;
             }
 
-            return (MoveRightAndWrap(posX, false), MoveUpAndWrap(posY));
+            return HexAt(GetPreviousRow(hex), GetNextCol(hex, false));
         }
 
-        public bool CanMoveRight(int posX, bool doubleWidth) => posX < Width - (doubleWidth ? 2 : 1);
+        public bool CanMoveRight(Hex hex, bool doubleWidth) => hex.Col < Width - (doubleWidth ? 2 : 1);
 
-        public bool CanMoveLeft(int posX, bool doubleWidth) => posX > (doubleWidth ? 1 : 0);
+        public bool CanMoveLeft(Hex hex, bool doubleWidth) => hex.Col > (doubleWidth ? 1 : 0);
 
-        public bool CanMoveDownRight(int posX, int posY) => CanMoveDown(posY) && CanMoveRight(posX, false);
+        public bool CanMoveDownRight(Hex hex) => CanMoveDown(hex) && CanMoveRight(hex, false);
 
-        public bool CanMoveDownLeft(int posX, int posY) => CanMoveDown(posY) && CanMoveLeft(posX, false);
+        public bool CanMoveDownLeft(Hex hex) => CanMoveDown(hex) && CanMoveLeft(hex, false);
 
-        public bool CanMoveUpLeft(int posX, int posY) => CanMoveUp(posY) && CanMoveLeft(posX, false);
+        public bool CanMoveUpLeft(Hex hex) => CanMoveUp(hex) && CanMoveLeft(hex, false);
 
-        public bool CanMoveUpRight(int posX, int posY) => CanMoveUp(posY) && CanMoveRight(posX, false);
+        public bool CanMoveUpRight(Hex hex) => CanMoveUp(hex) && CanMoveRight(hex, false);
 
-        private bool CanMoveDown(int posY) => posY < Height - 1;
+        /// <summary>
+        /// Returns the hex in the given row and column. Column needs to be halved because of
+        /// double-width coordinate system.
+        /// </summary>
+        public Hex HexAt(int row, int col) => Rows[row][col / 2];
 
-        private bool CanMoveUp(int posY) => posY > 0;
+        private bool CanMoveDown(Hex hex) => hex.Row < Height - 1;
 
-        private int MoveRightAndWrap(int posX, bool doubleWidth)
+        private bool CanMoveUp(Hex hex) => hex.Row > 0;
+
+        private int GetNextCol(Hex hex, bool doubleWidth)
         {
-            var newPos = doubleWidth ? posX + 2 : posX + 1;
+            var newCol = doubleWidth ? hex.Col + 2 : hex.Col + 1;
 
-            if (CanMoveRight(posX, doubleWidth))
+            if (CanMoveRight(hex, doubleWidth))
             {
-                return newPos;
+                return newCol;
             }
 
-            return WrapMovement ? newPos % Width : posX;
+            return WrapMovement ? newCol % Width : hex.Col;
         }
 
-        private int MoveDownAndWrap(int posY)
+        private int GetNextRow(Hex hex)
         {
-            var newPos = posY + 1;
+            var newRow = hex.Row + 1;
 
-            if (CanMoveDown(posY))
+            if (CanMoveDown(hex))
             {
-                return newPos;
+                return newRow;
             }
 
-            return WrapMovement ? newPos % Height : posY;
+            return WrapMovement ? newRow % Height : hex.Row;
         }
 
-        private int MoveLeftAndWrap(int posX, bool doubleWidth)
+        private int GetPreviousCol(Hex hex, bool doubleWidth)
         {
-            var newPos = doubleWidth ? posX - 2 : posX - 1;
+            var newCol = doubleWidth ? hex.Col - 2 : hex.Col - 1;
 
-            if (CanMoveLeft(posX, doubleWidth))
+            if (CanMoveLeft(hex, doubleWidth))
             {
-                return newPos;
-            }
-
-            // cannot use modulo on negative ints
-            return WrapMovement ? newPos + Width : posX;
-        }
-
-        private int MoveUpAndWrap(int posY)
-        {
-            var newPos = posY - 1;
-
-            if (CanMoveUp(posY))
-            {
-                return newPos;
+                return newCol;
             }
 
             // cannot use modulo on negative ints
-            return WrapMovement ? newPos + Height : posY;
+            return WrapMovement ? newCol + Width : hex.Col;
+        }
+
+        private int GetPreviousRow(Hex hex)
+        {
+            var newRow = hex.Row - 1;
+
+            if (CanMoveUp(hex))
+            {
+                return newRow;
+            }
+
+            // cannot use modulo on negative ints
+            return WrapMovement ? newRow + Height : hex.Row;
         }
     }
 }

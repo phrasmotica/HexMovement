@@ -1,9 +1,9 @@
-﻿namespace HexMovementApp
+﻿using HexGrid;
+
+namespace HexMovementApp
 {
     public class Player
     {
-        public int PosX { get; set; }
-
-        public int PosY { get; set; }
+        public Hex? Hex { get; set; }
     }
 }

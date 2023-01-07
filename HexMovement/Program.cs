@@ -4,7 +4,7 @@ using HexGridConsole;
 
 static void PrintHexGrid(HexGrid.HexGrid hexGrid, Player player)
 {
-    Console.WriteLine($"Player is at ({player.PosX}, {player.PosY})");
+    Console.WriteLine($"Player is at ({player.Hex!.Col}, {player.Hex!.Row})");
     Console.WriteLine(ToString(hexGrid, player));
     Console.WriteLine();
 }
@@ -26,15 +26,9 @@ static string RowToString(List<Hex> hexes, int row, Player player)
     return joined;
 }
 
-static string HexToString(HexGrid.Hex hex, Player player)
-{
-    return IsOccupied(hex.Row, hex.Col, player) ? "X" : ".";
-}
+static string HexToString(Hex hex, Player player) => IsOccupied(hex, player) ? "X" : ".";
 
-static bool IsOccupied(int row, int col, Player player)
-{
-    return player.PosX == col && player.PosY == row;
-}
+static bool IsOccupied(Hex hex, Player player) => player.Hex == hex;
 
 static void ToggleWrapMovement(HexGrid.HexGrid hexGrid)
 {
@@ -61,7 +55,12 @@ Console.WriteLine("HexGrid");
 Console.WriteLine();
 
 var hexGrid = new HexGrid.HexGrid(8, 6);
-var player = new Player();
+
+var player = new Player()
+{
+    Hex = hexGrid.HexAt(0, 0),
+};
+
 PrintHexGrid(hexGrid, player);
 
 string? input;
@@ -79,37 +78,37 @@ do
 
     if (input == "r")
     {
-        (player.PosX, player.PosY) = hexGrid.MoveRight(player.PosX, player.PosY);
+        player.Hex = hexGrid.MoveRight(player.Hex!);
         PrintHexGrid(hexGrid, player);
     }
 
     if (input == "dr")
     {
-        (player.PosX, player.PosY) = hexGrid.MoveDownRight(player.PosX, player.PosY);
+        player.Hex = hexGrid.MoveDownRight(player.Hex!);
         PrintHexGrid(hexGrid, player);
     }
 
     if (input == "dl")
     {
-        (player.PosX, player.PosY) = hexGrid.MoveDownLeft(player.PosX, player.PosY);
+        player.Hex = hexGrid.MoveDownLeft(player.Hex!);
         PrintHexGrid(hexGrid, player);
     }
 
     if (input == "l")
     {
-        (player.PosX, player.PosY) = hexGrid.MoveLeft(player.PosX, player.PosY);
+        player.Hex = hexGrid.MoveLeft(player.Hex!);
         PrintHexGrid(hexGrid, player);
     }
 
     if (input == "ul")
     {
-        (player.PosX, player.PosY) = hexGrid.MoveUpLeft(player.PosX, player.PosY);
+        player.Hex = hexGrid.MoveUpLeft(player.Hex!);
         PrintHexGrid(hexGrid, player);
     }
 
     if (input == "ur")
     {
-        (player.PosX, player.PosY) = hexGrid.MoveUpRight(player.PosX, player.PosY);
+        player.Hex = hexGrid.MoveUpRight(player.Hex!);
         PrintHexGrid(hexGrid, player);
     }
 
