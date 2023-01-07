@@ -27,6 +27,8 @@ namespace HexMovementApp
 
         public event Action<Hex?, Hex?> OnChangeRoute;
 
+        public event Action<bool> OnToggleWrapMovement;
+
         public event Action OnReset;
 
         public DistanceHexGrid()
@@ -38,6 +40,10 @@ namespace HexMovementApp
 
             OnChangeRoute += UpdateButtonStates;
             OnChangeRoute += UpdateDistance;
+
+            OnToggleWrapMovement += shouldWrap => _hexGrid.WrapMovement = shouldWrap;
+            OnToggleWrapMovement += shouldWrap => UpdateButtonStates(_start, _end);
+            OnToggleWrapMovement += shouldWrap => UpdateDistance(_start, _end);
 
             OnReset += ResetButtons;
             OnReset += () => UpdateDistance(null, null);
@@ -103,11 +109,9 @@ namespace HexMovementApp
 
         private void UpdateDistance(Hex? start, Hex? end)
         {
-            // TODO: allow wrapping
-
             if (start is not null && end is not null)
             {
-                var distance = HexGridDistance.ComputeDistanceDoubleWidth(start, end);
+                var distance = HexGridDistance.ComputeWrappedDistanceDoubleWidth(_hexGrid, start, end);
                 distanceText.Content = $"Distance: {distance} tile(s)";
             }
             else
@@ -148,5 +152,9 @@ namespace HexMovementApp
             _start = _end = null;
             OnReset();
         }
+
+        private void SetWrapOn(object sender, RoutedEventArgs e) => OnToggleWrapMovement(true);
+
+        private void SetWrapOff(object sender, RoutedEventArgs e) => OnToggleWrapMovement(false);
     }
 }

@@ -1,9 +1,9 @@
 ﻿<UserControl x:Class="HexMovementApp.DistanceHexGrid"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -35,7 +35,13 @@
 
         <StackPanel x:Name="distanceButtonsPanel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Label Name="distanceText" Content="Distance: ? tile(s)" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24" />
-            <Button x:Name="resetButton" Content="Reset" Click="ButtonReset_Click" FontSize="24" />
+
+            <CheckBox x:Name="wrapCheckbox" Content="Wrap"
+                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                      Checked="SetWrapOn" Unchecked="SetWrapOff" />
+
+            <Button x:Name="resetButton" Content="Reset" Margin="0,6,0,0" Click="ButtonReset_Click" FontSize="24" />
         </StackPanel>
     </Grid>
 </UserControl>
