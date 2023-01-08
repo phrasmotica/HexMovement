@@ -18,5 +18,9 @@
         <TabItem Header="Neighbours">
             <control:NeighboursHexGrid />
         </TabItem>
+
+        <TabItem Header="Pathfinding">
+            <control:Pathfinding />
+        </TabItem>
     </TabControl>
 </Window>

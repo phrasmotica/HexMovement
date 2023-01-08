@@ -46,9 +46,13 @@
         {
             var coords = new[]
             {
-                (hex.Col - 1, hex.Row - 1), (hex.Col + 1, hex.Row - 1), // row above
-                (hex.Col - 2, hex.Row), (hex.Col + 2, hex.Row), // this row
-                (hex.Col - 1, hex.Row + 1), (hex.Col + 1, hex.Row + 1), // row below
+                // anticlockwise, starting from east neighbour
+                (hex.Col + 2, hex.Row),
+                (hex.Col + 1, hex.Row - 1),
+                (hex.Col - 1, hex.Row - 1),
+                (hex.Col - 2, hex.Row),
+                (hex.Col - 1, hex.Row + 1),
+                (hex.Col + 1, hex.Row + 1),
             };
 
             if (!WrapMovement)
