@@ -81,6 +81,7 @@ namespace HexMovementApp
                         Height = ButtonSize,
                         Margin = new Thickness(x > 0 ? MarginSize : 0, 0, 0, 0),
                         Content = $"({hex.Col}, {hex.Row})",
+                        Background = new SolidColorBrush(GetColour(hex)),
                     };
 
                     button.Click += (sender, args) => SetRoute(hex);
@@ -93,6 +94,8 @@ namespace HexMovementApp
                 rowsPanel.Children.Add(rowPanel);
             }
         }
+
+        private static Color GetColour(Hex hex) => hex.Terrain == Terrain.Hill ? Colors.Yellow : Colors.Green;
 
         private void UpdateButtonStates(Hex? start, Hex? end)
         {
@@ -115,6 +118,7 @@ namespace HexMovementApp
             {
                 var path = HexGridPath.ComputeWrappedPath(_hexGrid, start, end);
                 distanceText.Content = $"Distance: {path.Count} tile(s)";
+                costText.Content = $"Cost: {HexGridPath.ComputeCost(path.Prepend(start).ToList())} move(s)";
 
                 for (var y = 0; y < _tileRows.Count; y++)
                 {
@@ -134,7 +138,7 @@ namespace HexMovementApp
                         }
                         else
                         {
-                            button.Background = new SolidColorBrush(Color.FromRgb(221, 221, 221));
+                            button.Background = new SolidColorBrush(GetColour(hex));
                             button.Content = $"({hex.Col}, {hex.Row})";
                         }
                     }
@@ -158,7 +162,7 @@ namespace HexMovementApp
                     var hex = _hexGrid.Rows[y][x];
 
                     button.IsEnabled = true;
-                    button.Background = new SolidColorBrush(Color.FromRgb(221, 221, 221));
+                    button.Background = new SolidColorBrush(GetColour(hex));
                     button.Content = $"({hex.Col}, {hex.Row})";
                 }
             }

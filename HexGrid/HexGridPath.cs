@@ -3,6 +3,19 @@
     public class HexGridPath
     {
         /// <summary>
+        /// Returns the cost of movement along the given path, recursively.
+        /// </summary>
+        public static int ComputeCost(List<Hex> path)
+        {
+            if (path.Count < 2) 
+            {
+                return 0;
+            }
+
+            return ComputeCost(path[0], path[1]) + ComputeCost(path.Skip(1).ToList());
+        }
+
+        /// <summary>
         /// Returns the shortest path between two hexes in a double-width coordinate system grid.
         /// Will account for the grid having wrapping enabled.
         /// </summary>
@@ -71,8 +84,7 @@
 
                 foreach (var next in grid.GetNeighbours(current))
                 {
-                    // currently it's a movement cost of 1 everywhere
-                    var newCost = costSoFar[current] + 1;
+                    var newCost = costSoFar[current] + ComputeCost(current, next);
 
                     if (!costSoFar.TryGetValue(next, out var nextCost) || newCost < nextCost)
                     {
@@ -88,6 +100,15 @@
 
             return BuildPath(cameFrom, start, end);
         }
+
+        /// <summary>
+        /// Returns the cost of moving from one hex to another. Moving to a hill costs 2, else costs 1.
+        /// </summary>
+        private static int ComputeCost(Hex current, Hex next) => (current.Terrain, next.Terrain) switch
+        {
+            (_, Terrain.Hill) => 2,
+            (_, _) => 1,
+        };
 
         /// <summary>
         /// Computes the taxicab distance between the two hexes, as a heuristic for the A* algorithm.

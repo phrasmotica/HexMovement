@@ -20,16 +20,29 @@
 
             Rows = new();
 
-            for (var row = 0; row < height; row++)
+            GenerateMap();
+        }
+
+        private void GenerateMap()
+        {
+            var rand = new Random();
+
+            for (var row = 0; row < Height; row++)
             {
                 var hexes = new List<Hex>();
 
                 // odd rows start at column 1
                 var startCol = row % 2 != 0 ? 1 : 0;
 
-                for (var col = startCol; col < width; col += 2)
+                for (var col = startCol; col < Width; col += 2)
                 {
-                    hexes.Add(new(row, col));
+                    // random terrain for each tile
+                    var r = rand.Next(2) + 1;
+
+                    hexes.Add(new(row, col)
+                    {
+                        Terrain = (Terrain) r,
+                    });
                 }
 
                 Rows.Add(hexes);
