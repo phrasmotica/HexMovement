@@ -111,7 +111,7 @@ namespace HexMovementApp
         {
             if (start is not null && end is not null)
             {
-                var distance = HexGridDistance.ComputeWrappedDistanceDoubleWidth(_hexGrid, start, end);
+                var distance = HexGridDistance.ComputeWrappedDistance(_hexGrid, start, end);
                 distanceText.Content = $"Distance: {distance} tile(s)";
             }
             else

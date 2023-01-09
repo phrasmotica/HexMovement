@@ -3,12 +3,12 @@
     public class HexGridDistance
     {
         /// <summary>
-        /// Returns the distance between two hexes in a double-width coordinate system grid, in
-        /// terms of the number of hexes. Will account for the grid having wrapping enabled.
+        /// Returns the distance between two hexes in terms of the number of hexes. Will account for
+        /// the grid having wrapping enabled.
         /// </summary>
-        public static int ComputeWrappedDistanceDoubleWidth(HexGrid grid, Hex start, Hex end)
+        public static int ComputeWrappedDistance(HexGrid grid, Hex start, Hex end)
         {
-            var distance = ComputeDistanceDoubleWidth(start.Row, start.Col, end.Row, end.Col);
+            var distance = ComputeDistance(start, end);
 
             if (grid.WrapMovement)
             {
@@ -23,13 +23,13 @@
                     distance,
 
                     // wrapped around the west edge
-                    ComputeDistanceDoubleWidth(otherHex.Row, otherHex.Col, candidateHex.Row, candidateHex.Col - grid.Width),
+                    ComputeDistance(otherHex, new Hex(candidateHex.Row, candidateHex.Col - grid.Width)),
 
                     // wrapped around the north edge
-                    ComputeDistanceDoubleWidth(otherHex.Row, otherHex.Col, candidateHex.Row - grid.Height, candidateHex.Col),
+                    ComputeDistance(otherHex, new Hex(candidateHex.Row - grid.Height, candidateHex.Col)),
 
                     // wrapped around both west and north edges
-                    ComputeDistanceDoubleWidth(otherHex.Row, otherHex.Col, candidateHex.Row - grid.Height, candidateHex.Col - grid.Width),
+                    ComputeDistance(otherHex, new Hex(candidateHex.Row - grid.Height, candidateHex.Col - grid.Width)),
                 };
 
                 return candidateDistances.Min();
@@ -39,17 +39,24 @@
         }
 
         /// <summary>
-        /// Returns the distance between two positions in a double-width coordinate system
-        /// in terms of the number of hexes, NOT the coordinate distance.
+        /// Returns the distance between two hexes in terms of the number of hexes, NOT the
+        /// coordinate distance.
         ///
-        /// Taken from https://www.redblobgames.com/grids/hexagons/#distances-doubled.
+        /// Taken from https://www.redblobgames.com/grids/hexagons/#distances-axial.
         /// </summary>
-        private static int ComputeDistanceDoubleWidth(int startRow, int startCol, int endRow, int endCol)
-        {
-            var distX = Math.Abs(startCol - endCol);
-            var distY = Math.Abs(startRow - endRow);
+        private static int ComputeDistance(Hex start, Hex end) => ComputeDistance(start.Q, start.R, end.Q, end.R);
 
-            return distY + Math.Max(0, (distX - distY) / 2);
+        /// <summary>
+        /// Returns the distance between two hexes in terms of the number of hexes, NOT the
+        /// coordinate distance.
+        ///
+        /// Taken from https://www.redblobgames.com/grids/hexagons/#distances-axial.
+        /// </summary>
+        private static int ComputeDistance(int startQ, int startR, int endQ, int endR)
+        {
+            return (Math.Abs(startQ - endQ)
+                  + Math.Abs(startQ + startR - endQ - endR)
+                  + Math.Abs(startR - endR)) / 2;
         }
     }
 }
