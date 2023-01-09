@@ -118,7 +118,11 @@ namespace HexMovementApp
             {
                 var path = HexGridPath.ComputeWrappedPath(_hexGrid, start, end);
                 distanceText.Content = $"Distance: {path.Count} tile(s)";
-                costText.Content = $"Cost: {HexGridPath.ComputeCost(path.Prepend(start).ToList())} move(s)";
+
+                path.Insert(0, start);
+                var movementCosts = HexGridPath.ComputeCosts(path);
+
+                costText.Content = $"Cost: {movementCosts.Sum()} move(s)";
 
                 for (var y = 0; y < _tileRows.Count; y++)
                 {
@@ -134,7 +138,13 @@ namespace HexMovementApp
                         if (index > -1)
                         {
                             button.Background = new SolidColorBrush(Colors.AliceBlue);
-                            button.Content = $"({hex.Col}, {hex.Row})\n[{index + 1}]";
+
+                            if (index > 0)
+                            {
+                                // show cumulative movement cost
+                                var cumulativeCost = movementCosts.Take(index).Sum();
+                                button.Content = $"({hex.Col}, {hex.Row})\n[{cumulativeCost}]";
+                            }
                         }
                         else
                         {

@@ -5,14 +5,17 @@
         /// <summary>
         /// Returns the cost of movement along the given path, recursively.
         /// </summary>
-        public static int ComputeCost(List<Hex> path)
+        public static List<int> ComputeCosts(List<Hex> path)
         {
             if (path.Count < 2) 
             {
-                return 0;
+                return new List<int>();
             }
 
-            return ComputeCost(path[0], path[1]) + ComputeCost(path.Skip(1).ToList());
+            var cost = ComputeCost(path[0], path[1]);
+            var remainingHexes = path.Skip(1).ToList();
+
+            return ComputeCosts(remainingHexes).Prepend(cost).ToList();
         }
 
         /// <summary>
@@ -117,7 +120,7 @@
         /// </summary>
         private static int ComputeHeuristic(HexGrid grid, Hex a, Hex b)
         {
-            return HexGridDistance.ComputeWrappedDistanceDoubleWidth(grid, a, b);
+            return HexGridDistance.ComputeWrappedDistance(grid, a, b);
         }
 
         /// <summary>
