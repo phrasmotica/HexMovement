@@ -15,23 +15,23 @@
             <Label Name="positionText" Content="Player position: (0, 0)" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24" />
 
             <StackPanel Orientation="Horizontal">
-                <Rectangle Width="40" Height="40" Fill="Crimson" Stroke="Black" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
+                <Ellipse Width="40" Height="40" Fill="Crimson" Stroke="Black" />
+                <Ellipse Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
+                <Ellipse Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
+                <Ellipse Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
+                <Ellipse Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
+                <Ellipse Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
+                <Ellipse Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="23,6,0,0">
-                <Rectangle Width="40" Height="40" Fill="AliceBlue" Stroke="Black" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
-                <Rectangle Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
+                <Ellipse Width="40" Height="40" Fill="AliceBlue" Stroke="Black" />
+                <Ellipse Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
+                <Ellipse Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
+                <Ellipse Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
+                <Ellipse Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
+                <Ellipse Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
+                <Ellipse Width="40" Height="40"  Fill="AliceBlue" Stroke="Black" Margin="6,0,0,0" />
             </StackPanel>
         </StackPanel>
 

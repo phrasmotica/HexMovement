@@ -11,4 +11,10 @@
     <ProjectReference Include="..\HexGrid\HexGrid.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Coordinates.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>
