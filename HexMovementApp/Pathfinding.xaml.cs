@@ -19,7 +19,7 @@ namespace HexMovementApp
         private const int ButtonSize = 40;
         private const int MarginSize = 6;
 
-        private readonly HexGrid.HexGrid _hexGrid;
+        private readonly IHexGrid _hexGrid;
 
         private readonly List<List<Button>> _tileRows;
 
@@ -37,7 +37,7 @@ namespace HexMovementApp
         {
             InitializeComponent();
 
-            _hexGrid = new(GridWidth, GridHeight);
+            _hexGrid = new HexGrid.HexGrid(GridWidth, GridHeight);
             _tileRows = new();
 
             OnChangeRoute += UpdateButtonStates;

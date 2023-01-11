@@ -35,6 +35,32 @@
         }
     }
 
+    public class AxialHex
+    {
+        /// <summary>
+        /// Gets the axial Q-coordinate of the hex.
+        /// </summary>
+        public int Q { get; }
+
+        /// <summary>
+        /// Gets the axial R-coordinate of the hex.
+        /// </summary>
+        public int R { get; }
+
+        /// <summary>
+        /// Gets the axial S-coordinate of the hex.
+        /// </summary>
+        public int S => -Q - R;
+
+        public Terrain Terrain { get; set; }
+
+        public AxialHex(int q, int r)
+        {
+            Q = q;
+            R = r;
+        }
+    }
+
     public enum Terrain
     {
         Plains,

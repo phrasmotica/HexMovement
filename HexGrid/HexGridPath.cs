@@ -22,7 +22,7 @@
         /// Returns the shortest path between two hexes in a double-width coordinate system grid.
         /// Will account for the grid having wrapping enabled.
         /// </summary>
-        public static List<Hex> ComputeWrappedPath(HexGrid grid, Hex start, Hex end)
+        public static List<Hex> ComputeWrappedPath(IHexGrid grid, Hex start, Hex end)
         {
             var path = ComputePath(grid, start, end);
 
@@ -59,7 +59,7 @@
         ///
         /// Taken from https://www.redblobgames.com/grids/hexagons/#pathfinding.
         /// </summary>
-        private static List<Hex> ComputePath(HexGrid grid, Hex start, Hex end)
+        private static List<Hex> ComputePath(IHexGrid grid, Hex start, Hex end)
         {
             var frontier = new PriorityQueue<Hex, int>();
             frontier.Enqueue(start, 0);
@@ -118,7 +118,7 @@
         /// 
         /// Taken from https://www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first.
         /// </summary>
-        private static int ComputeHeuristic(HexGrid grid, Hex a, Hex b)
+        private static int ComputeHeuristic(IHexGrid grid, Hex a, Hex b)
         {
             return HexGridDistance.ComputeWrappedDistance(grid, a, b);
         }

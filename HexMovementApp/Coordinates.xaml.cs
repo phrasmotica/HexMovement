@@ -18,7 +18,7 @@ namespace HexMovementApp
         private const int CellSize = 40;
         private const int MarginSize = 6;
 
-        private readonly HexGrid.HexGrid _hexGrid;
+        private readonly IHexGrid _hexGrid;
 
         private readonly List<List<Button>> _tileRows;
 
@@ -31,8 +31,7 @@ namespace HexMovementApp
         {
             InitializeComponent();
 
-            // TODO: allow rendering a grid with axial coordinates as a hexagon of hexagons...
-            _hexGrid = new(GridWidth, GridHeight);
+            _hexGrid = new HexGrid.HexGrid(GridWidth, GridHeight);
             _tileRows = new();
 
             OnSetCoordinateSystem += system =>

@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a hexagonal grid using a double-width coordinate system (see https://www.redblobgames.com/grids/hexagons/).
     /// </summary>
-    public class HexGrid
+    public class HexGrid : IHexGrid
     {
         public int Width { get; }
 

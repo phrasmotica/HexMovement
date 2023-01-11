@@ -6,7 +6,7 @@
         /// Returns the distance between two hexes in terms of the number of hexes. Will account for
         /// the grid having wrapping enabled.
         /// </summary>
-        public static int ComputeWrappedDistance(HexGrid grid, Hex start, Hex end)
+        public static int ComputeWrappedDistance(IHexGrid grid, Hex start, Hex end)
         {
             var distance = ComputeDistance(start, end);
 

@@ -2,14 +2,14 @@
 using HexGrid;
 using HexGridConsole;
 
-static void PrintHexGrid(HexGrid.HexGrid hexGrid, Player player)
+static void PrintHexGrid(IHexGrid hexGrid, Player player)
 {
     Console.WriteLine($"Player is at ({player.Hex!.Col}, {player.Hex!.Row})");
     Console.WriteLine(ToString(hexGrid, player));
     Console.WriteLine();
 }
 
-static string ToString(HexGrid.HexGrid hexGrid, Player player)
+static string ToString(IHexGrid hexGrid, Player player)
 {
     return string.Join("\n", hexGrid.Rows.Select((r, i) => RowToString(r, i, player)));
 }
@@ -30,7 +30,7 @@ static string HexToString(Hex hex, Player player) => IsOccupied(hex, player) ? "
 
 static bool IsOccupied(Hex hex, Player player) => player.Hex == hex;
 
-static void ToggleWrapMovement(HexGrid.HexGrid hexGrid)
+static void ToggleWrapMovement(IHexGrid hexGrid)
 {
     hexGrid.WrapMovement = !hexGrid.WrapMovement;
 

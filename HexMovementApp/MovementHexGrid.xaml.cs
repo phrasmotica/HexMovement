@@ -19,7 +19,7 @@ namespace HexMovementApp
         private const int CellSize = 40;
         private const int MarginSize = 6;
 
-        private readonly HexGrid.HexGrid _hexGrid;
+        private readonly IHexGrid _hexGrid;
 
         private readonly Player _player;
 
@@ -33,7 +33,7 @@ namespace HexMovementApp
         {
             InitializeComponent();
 
-            _hexGrid = new(GridWidth, GridHeight);
+            _hexGrid = new HexGrid.HexGrid(GridWidth, GridHeight);
             
             _player = new()
             {
