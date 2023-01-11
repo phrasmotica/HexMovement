@@ -5,6 +5,8 @@
     /// </summary>
     public class DoubleWidthHexGrid : IHexGrid
     {
+        private readonly IPathCalculator _pathCalculator;
+
         public int Width { get; }
 
         public int Height { get; }
@@ -13,12 +15,14 @@
 
         public bool WrapMovement { get; set; }
 
-        public DoubleWidthHexGrid(int width, int height)
+        public DoubleWidthHexGrid(int width, int height, IPathCalculator? pathCalculator = null)
         {
             Width = width;
             Height = height;
 
             Rows = new();
+
+            _pathCalculator = pathCalculator ?? new AStarPathCalculator();
 
             GenerateMap();
         }
@@ -74,6 +78,87 @@
             };
 
             return coords.Select(c => HexAt(c.Item1, c.Item2)).ToList();
+        }
+
+        /// <summary>
+        /// Returns the distance between two hexes in terms of the number of hexes. Will account for
+        /// the grid having wrapping enabled.
+        ///
+        /// Taken from https://www.redblobgames.com/grids/hexagons/#distances-doubled
+        /// </summary>
+        public int ComputeWrappedDistance(IHex start, IHex end)
+        {
+            var distance = ComputeDistance(start, end);
+
+            if (WrapMovement)
+            {
+                // We'll bring the candidate (rightmost) hex "around" the edges of the grid,
+                // and find the shortest distance to each of these wrapped positions.
+                // Not sure why we don't need to ensure the candidate is also the bottom-most
+                // hex, but this seems to be working!
+                var (candidateHex, otherHex) = start.Col > end.Col ? (start, end) : (end, start);
+
+                var candidateDistances = new[]
+                {
+                    distance,
+
+                    // wrapped around the west edge
+                    ComputeDistance(otherHex, new DoubleWidthHex(candidateHex.Row, candidateHex.Col - Width)),
+
+                    // wrapped around the north edge
+                    ComputeDistance(otherHex, new DoubleWidthHex(candidateHex.Row - Height, candidateHex.Col)),
+
+                    // wrapped around both west and north edges
+                    ComputeDistance(otherHex, new DoubleWidthHex(candidateHex.Row - Height, candidateHex.Col - Width)),
+                };
+
+                return candidateDistances.Min();
+            }
+
+            return distance;
+        }
+
+        private static int ComputeDistance(IHex start, IHex end)
+        {
+            var distX = Math.Abs(start.Col - end.Col);
+            var distY = Math.Abs(start.Row - end.Row);
+
+            return distY + Math.Max(0, (distX - distY) / 2);
+        }
+
+        /// <summary>
+        /// Returns the shortest path between two hexes. Will account for the grid having wrapping enabled.
+        /// </summary>
+        public Path ComputeWrappedPath(IHex start, IHex end)
+        {
+            var path = _pathCalculator.Compute(this, start, end);
+
+            if (WrapMovement)
+            {
+                // We'll bring the candidate (rightmost) hex "around" the edges of the grid,
+                // and find the shortest path to each of these wrapped positions.
+                // Not sure why we don't need to ensure the candidate is also the bottom-most
+                // hex, but this seems to be working!
+                var (candidateHex, otherHex) = start.Col > end.Col ? (start, end) : (end, start);
+
+                var candidatePaths = new[]
+                {
+                    path,
+
+                    // wrapped around the west edge
+                    _pathCalculator.Compute(this, otherHex, HexAt(candidateHex.Row, candidateHex.Col - Width)),
+
+                    // wrapped around the north edge
+                    _pathCalculator.Compute(this, otherHex, HexAt(candidateHex.Row - Height, candidateHex.Col)),
+
+                    // wrapped around both west and north edges
+                    _pathCalculator.Compute(this, otherHex, HexAt(candidateHex.Row - Height, candidateHex.Col - Width)),
+                };
+
+                return candidatePaths.MinBy(p => p.Length)!;
+            }
+
+            return path;
         }
 
         private bool IsInGrid(int row, int col)

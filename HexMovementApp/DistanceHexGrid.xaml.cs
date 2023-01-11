@@ -35,7 +35,7 @@ namespace HexMovementApp
         {
             InitializeComponent();
 
-            _hexGrid = new HexGrid.DoubleWidthHexGrid(GridWidth, GridHeight);
+            _hexGrid = new DoubleWidthHexGrid(GridWidth, GridHeight);
             _tileRows = new();
 
             OnChangeRoute += UpdateButtonStates;
@@ -111,7 +111,7 @@ namespace HexMovementApp
         {
             if (start is not null && end is not null)
             {
-                var distance = HexGridDistance.ComputeWrappedDistance(_hexGrid, start, end);
+                var distance = _hexGrid.ComputeWrappedDistance(start, end);
                 distanceText.Content = $"Distance: {distance} tile(s)";
             }
             else

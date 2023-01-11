@@ -24,6 +24,10 @@
 
         List<IHex> GetNeighbours(IHex hex);
 
+        int ComputeWrappedDistance(IHex start, IHex end);
+
+        Path ComputeWrappedPath(IHex start, IHex end);
+
         IHex HexAt(int row, int col);
 
         IHex MoveEast(IHex hex);

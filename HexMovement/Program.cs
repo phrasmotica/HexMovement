@@ -54,7 +54,7 @@ static void PrintHelp()
 Console.WriteLine("HexGrid");
 Console.WriteLine();
 
-var hexGrid = new HexGrid.DoubleWidthHexGrid(8, 6);
+var hexGrid = new DoubleWidthHexGrid(8, 6);
 
 var player = new Player()
 {

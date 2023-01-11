@@ -31,7 +31,7 @@ namespace HexMovementApp
         {
             InitializeComponent();
 
-            _hexGrid = new HexGrid.DoubleWidthHexGrid(GridWidth, GridHeight);
+            _hexGrid = new DoubleWidthHexGrid(GridWidth, GridHeight);
             _tileRows = new();
 
             OnSetCoordinateSystem += system =>

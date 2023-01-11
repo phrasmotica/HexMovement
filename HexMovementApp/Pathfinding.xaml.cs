@@ -37,7 +37,7 @@ namespace HexMovementApp
         {
             InitializeComponent();
 
-            _hexGrid = new HexGrid.DoubleWidthHexGrid(GridWidth, GridHeight);
+            _hexGrid = new DoubleWidthHexGrid(GridWidth, GridHeight);
             _tileRows = new();
 
             OnChangeRoute += UpdateButtonStates;
@@ -116,12 +116,10 @@ namespace HexMovementApp
         {
             if (start is not null && end is not null)
             {
-                var path = HexGridPath.ComputeWrappedPath(_hexGrid, start, end);
-                distanceText.Content = $"Distance: {path.Count} tile(s)";
+                var path = _hexGrid.ComputeWrappedPath(start, end);
+                distanceText.Content = $"Distance: {path.Length} tile(s)";
 
-                path.Insert(0, start);
-                var movementCosts = HexGridPath.ComputeCosts(path);
-
+                var movementCosts = path.ComputeCosts();
                 costText.Content = $"Cost: {movementCosts.Sum()} move(s)";
 
                 for (var y = 0; y < _tileRows.Count; y++)
@@ -134,7 +132,7 @@ namespace HexMovementApp
                         var hex = _hexGrid.Rows[y][x];
 
                         // highlight hexes in the path
-                        var index = path.FindIndex(0, path.Count, h => x == (h.Col / 2) && y == h.Row);
+                        var index = path.Hexes.FindIndex(0, path.Hexes.Count, h => x == (h.Col / 2) && y == h.Row);
                         if (index > -1)
                         {
                             button.Background = new SolidColorBrush(Colors.AliceBlue);
