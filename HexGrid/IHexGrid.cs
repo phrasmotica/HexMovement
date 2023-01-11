@@ -4,38 +4,38 @@
     {
         int Height { get; }
 
-        List<List<Hex>> Rows { get; }
+        List<List<IHex>> Rows { get; }
 
         int Width { get; }
 
         bool WrapMovement { get; set; }
 
-        bool CanMoveEast(Hex hex, bool doubleWidth);
+        bool CanMoveEast(IHex hex);
 
-        bool CanMoveNorthEast(Hex hex);
+        bool CanMoveNorthEast(IHex hex);
 
-        bool CanMoveNorthWest(Hex hex);
+        bool CanMoveNorthWest(IHex hex);
 
-        bool CanMoveSouthEast(Hex hex);
+        bool CanMoveSouthEast(IHex hex);
 
-        bool CanMoveSouthWest(Hex hex);
+        bool CanMoveSouthWest(IHex hex);
 
-        bool CanMoveWest(Hex hex, bool doubleWidth);
+        bool CanMoveWest(IHex hex);
 
-        List<Hex> GetNeighbours(Hex hex);
+        List<IHex> GetNeighbours(IHex hex);
 
-        Hex HexAt(int row, int col);
+        IHex HexAt(int row, int col);
 
-        Hex MoveEast(Hex hex);
+        IHex MoveEast(IHex hex);
 
-        Hex MoveNorthEast(Hex hex);
+        IHex MoveNorthEast(IHex hex);
 
-        Hex MoveNorthWest(Hex hex);
+        IHex MoveNorthWest(IHex hex);
 
-        Hex MoveSouthEast(Hex hex);
+        IHex MoveSouthEast(IHex hex);
 
-        Hex MoveSouthWest(Hex hex);
+        IHex MoveSouthWest(IHex hex);
 
-        Hex MoveWest(Hex hex);
+        IHex MoveWest(IHex hex);
     }
 }

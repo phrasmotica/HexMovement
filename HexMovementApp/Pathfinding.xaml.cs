@@ -23,11 +23,11 @@ namespace HexMovementApp
 
         private readonly List<List<Button>> _tileRows;
 
-        private Hex? _start;
-        private Hex? _end;
+        private IHex? _start;
+        private IHex? _end;
         private bool _setEnd;
 
-        public event Action<Hex?, Hex?> OnChangeRoute;
+        public event Action<IHex?, IHex?> OnChangeRoute;
 
         public event Action<bool> OnToggleWrapMovement;
 
@@ -37,7 +37,7 @@ namespace HexMovementApp
         {
             InitializeComponent();
 
-            _hexGrid = new HexGrid.HexGrid(GridWidth, GridHeight);
+            _hexGrid = new HexGrid.DoubleWidthHexGrid(GridWidth, GridHeight);
             _tileRows = new();
 
             OnChangeRoute += UpdateButtonStates;
@@ -95,9 +95,9 @@ namespace HexMovementApp
             }
         }
 
-        private static Color GetColour(Hex hex) => hex.Terrain == Terrain.Hill ? Colors.Yellow : Colors.Green;
+        private static Color GetColour(IHex hex) => hex.Terrain == Terrain.Hill ? Colors.Yellow : Colors.Green;
 
-        private void UpdateButtonStates(Hex? start, Hex? end)
+        private void UpdateButtonStates(IHex? start, IHex? end)
         {
             for (var y = 0; y < _tileRows.Count; y++)
             {
@@ -112,7 +112,7 @@ namespace HexMovementApp
             }
         }
 
-        private void UpdatePath(Hex? start, Hex? end)
+        private void UpdatePath(IHex? start, IHex? end)
         {
             if (start is not null && end is not null)
             {
@@ -178,7 +178,7 @@ namespace HexMovementApp
             }
         }
 
-        private void SetRoute(Hex hex)
+        private void SetRoute(IHex hex)
         {
             if (_setEnd)
             {

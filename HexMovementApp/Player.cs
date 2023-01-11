@@ -4,6 +4,6 @@ namespace HexMovementApp
 {
     public class Player
     {
-        public Hex? Hex { get; set; }
+        public IHex? Hex { get; set; }
     }
 }

@@ -6,7 +6,7 @@
         /// Returns the distance between two hexes in terms of the number of hexes. Will account for
         /// the grid having wrapping enabled.
         /// </summary>
-        public static int ComputeWrappedDistance(IHexGrid grid, Hex start, Hex end)
+        public static int ComputeWrappedDistance(IHexGrid grid, IHex start, IHex end)
         {
             var distance = ComputeDistance(start, end);
 
@@ -23,13 +23,13 @@
                     distance,
 
                     // wrapped around the west edge
-                    ComputeDistance(otherHex, new Hex(candidateHex.Row, candidateHex.Col - grid.Width)),
+                    ComputeDistance(otherHex, new DoubleWidthHex(candidateHex.Row, candidateHex.Col - grid.Width)),
 
                     // wrapped around the north edge
-                    ComputeDistance(otherHex, new Hex(candidateHex.Row - grid.Height, candidateHex.Col)),
+                    ComputeDistance(otherHex, new DoubleWidthHex(candidateHex.Row - grid.Height, candidateHex.Col)),
 
                     // wrapped around both west and north edges
-                    ComputeDistance(otherHex, new Hex(candidateHex.Row - grid.Height, candidateHex.Col - grid.Width)),
+                    ComputeDistance(otherHex, new DoubleWidthHex(candidateHex.Row - grid.Height, candidateHex.Col - grid.Width)),
                 };
 
                 return candidateDistances.Min();
@@ -44,7 +44,7 @@
         ///
         /// Taken from https://www.redblobgames.com/grids/hexagons/#distances-axial.
         /// </summary>
-        private static int ComputeDistance(Hex start, Hex end) => ComputeDistance(start.Q, start.R, end.Q, end.R);
+        private static int ComputeDistance(IHex start, IHex end) => ComputeDistance(start.Q, start.R, end.Q, end.R);
 
         /// <summary>
         /// Returns the distance between two hexes in terms of the number of hexes, NOT the

@@ -22,7 +22,7 @@ namespace HexMovementApp
 
         private readonly List<List<Button>> _tileRows;
 
-        private Hex? _hex;
+        private IHex? _hex;
         private CoordinateSystem _coordinateSystem;
 
         public event Action<CoordinateSystem> OnSetCoordinateSystem;
@@ -31,7 +31,7 @@ namespace HexMovementApp
         {
             InitializeComponent();
 
-            _hexGrid = new HexGrid.HexGrid(GridWidth, GridHeight);
+            _hexGrid = new HexGrid.DoubleWidthHexGrid(GridWidth, GridHeight);
             _tileRows = new();
 
             OnSetCoordinateSystem += system =>
@@ -97,7 +97,7 @@ namespace HexMovementApp
             axialText.Visibility = system == CoordinateSystem.AxialCube ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private void UpdateCoordinates(Hex? hex)
+        private void UpdateCoordinates(IHex? hex)
         {
             if (hex is not null)
             {
@@ -111,7 +111,7 @@ namespace HexMovementApp
             }
         }
 
-        private void UpdateButtons(Hex? hex)
+        private void UpdateButtons(IHex? hex)
         {
             for (var y = 0; y < _tileRows.Count; y++)
             {
@@ -136,20 +136,20 @@ namespace HexMovementApp
             }
         }
 
-        private bool ShouldHighlight(Hex? hex, int row, int col) => _coordinateSystem switch
+        private bool ShouldHighlight(IHex? hex, int row, int col) => _coordinateSystem switch
         {
             CoordinateSystem.DoubleWidth => IsSameRowOrCol(hex, row, col),
             CoordinateSystem.AxialCube => IsSameAxis(hex, row, col),
             _ => false,
         };
 
-        private bool IsSameRowOrCol(Hex? hex, int row, int col)
+        private bool IsSameRowOrCol(IHex? hex, int row, int col)
         {
             var other = _hexGrid.Rows[row][col];
             return other.Col == hex?.Col || other.Row == hex?.Row;
         }
 
-        private bool IsSameAxis(Hex? hex, int row, int col)
+        private bool IsSameAxis(IHex? hex, int row, int col)
         {
             var other = _hexGrid.Rows[row][col];
             return other.Q == hex?.Q || other.R == hex?.R || other.S == hex?.S;

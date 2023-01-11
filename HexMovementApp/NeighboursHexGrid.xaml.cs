@@ -23,9 +23,9 @@ namespace HexMovementApp
 
         private readonly List<List<Button>> _tileRows;
 
-        private Hex? _hex;
+        private IHex? _hex;
 
-        public event Action<Hex?> OnChangeHex;
+        public event Action<IHex?> OnChangeHex;
 
         public event Action<bool> OnToggleWrapMovement;
 
@@ -33,7 +33,7 @@ namespace HexMovementApp
         {
             InitializeComponent();
 
-            _hexGrid = new HexGrid.HexGrid(GridWidth, GridHeight);
+            _hexGrid = new HexGrid.DoubleWidthHexGrid(GridWidth, GridHeight);
             _tileRows = new();
 
             OnChangeHex += hex => _hex = hex;
@@ -88,9 +88,9 @@ namespace HexMovementApp
             }
         }
 
-        private void UpdateButtons(Hex? hex)
+        private void UpdateButtons(IHex? hex)
         {
-            var neighbours = new List<Hex>();
+            var neighbours = new List<IHex>();
 
             if (hex is not null)
             {
@@ -120,7 +120,7 @@ namespace HexMovementApp
             }
         }
 
-        private void UpdateNeighbours(Hex? hex)
+        private void UpdateNeighbours(IHex? hex)
         {
             if (hex is not null)
             {

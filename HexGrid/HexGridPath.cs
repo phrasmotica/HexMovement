@@ -5,9 +5,9 @@
         /// <summary>
         /// Returns the cost of movement along the given path, recursively.
         /// </summary>
-        public static List<int> ComputeCosts(List<Hex> path)
+        public static List<int> ComputeCosts(List<IHex> path)
         {
-            if (path.Count < 2) 
+            if (path.Count < 2)
             {
                 return new List<int>();
             }
@@ -22,7 +22,7 @@
         /// Returns the shortest path between two hexes in a double-width coordinate system grid.
         /// Will account for the grid having wrapping enabled.
         /// </summary>
-        public static List<Hex> ComputeWrappedPath(IHexGrid grid, Hex start, Hex end)
+        public static List<IHex> ComputeWrappedPath(IHexGrid grid, IHex start, IHex end)
         {
             var path = ComputePath(grid, start, end);
 
@@ -59,22 +59,22 @@
         ///
         /// Taken from https://www.redblobgames.com/grids/hexagons/#pathfinding.
         /// </summary>
-        private static List<Hex> ComputePath(IHexGrid grid, Hex start, Hex end)
+        private static List<IHex> ComputePath(IHexGrid grid, IHex start, IHex end)
         {
-            var frontier = new PriorityQueue<Hex, int>();
+            var frontier = new PriorityQueue<IHex, int>();
             frontier.Enqueue(start, 0);
 
-            var cameFrom = new Dictionary<Hex, Hex?>
+            var cameFrom = new Dictionary<IHex, IHex?>
             {
                 [start] = null,
             };
 
-            var costSoFar = new Dictionary<Hex, int>
+            var costSoFar = new Dictionary<IHex, int>
             {
                 [start] = 0,
             };
 
-            Hex current;
+            IHex current;
 
             while (frontier.Count > 0)
             {
@@ -107,7 +107,7 @@
         /// <summary>
         /// Returns the cost of moving from one hex to another. Moving to a hill costs 2, else costs 1.
         /// </summary>
-        private static int ComputeCost(Hex current, Hex next) => (current.Terrain, next.Terrain) switch
+        private static int ComputeCost(IHex current, IHex next) => (current.Terrain, next.Terrain) switch
         {
             (_, Terrain.Hill) => 2,
             (_, _) => 1,
@@ -115,10 +115,10 @@
 
         /// <summary>
         /// Computes the taxicab distance between the two hexes, as a heuristic for the A* algorithm.
-        /// 
+        ///
         /// Taken from https://www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first.
         /// </summary>
-        private static int ComputeHeuristic(IHexGrid grid, Hex a, Hex b)
+        private static int ComputeHeuristic(IHexGrid grid, IHex a, IHex b)
         {
             return HexGridDistance.ComputeWrappedDistance(grid, a, b);
         }
@@ -129,11 +129,11 @@
         ///
         /// Taken from https://www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search.
         /// </summary>
-        private static List<Hex> BuildPath(Dictionary<Hex, Hex?> cameFrom, Hex start, Hex end)
+        private static List<IHex> BuildPath(Dictionary<IHex, IHex?> cameFrom, IHex start, IHex end)
         {
             var current = end;
 
-            var path = new List<Hex>();
+            var path = new List<IHex>();
 
             while (current != start)
             {
@@ -141,7 +141,7 @@
                 current = cameFrom[current!];
             }
 
-            return path.Reverse<Hex>().ToList();
+            return path.Reverse<IHex>().ToList();
         }
     }
 }

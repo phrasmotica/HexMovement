@@ -33,7 +33,7 @@ namespace HexMovementApp
         {
             InitializeComponent();
 
-            _hexGrid = new HexGrid.HexGrid(GridWidth, GridHeight);
+            _hexGrid = new HexGrid.DoubleWidthHexGrid(GridWidth, GridHeight);
             
             _player = new()
             {
@@ -98,7 +98,7 @@ namespace HexMovementApp
             }
         }
 
-        private bool IsOccupied(Hex hex) => _player.Hex == hex;
+        private bool IsOccupied(IHex hex) => _player.Hex == hex;
 
         private void ButtonWest_Click(object sender, RoutedEventArgs e)
         {
@@ -161,10 +161,10 @@ namespace HexMovementApp
 
         private void UpdateButtonStates()
         {
-            buttonEast.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveEast(_player.Hex!, true);
+            buttonEast.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveEast(_player.Hex!);
             buttonSouthEast.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveSouthEast(_player.Hex!);
             buttonSouthWest.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveSouthWest(_player.Hex!);
-            buttonWest.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveWest(_player.Hex!, true);
+            buttonWest.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveWest(_player.Hex!);
             buttonNorthWest.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveNorthWest(_player.Hex!);
             buttonNorthEast.IsEnabled = _hexGrid.WrapMovement || _hexGrid.CanMoveNorthEast(_player.Hex!);
         }

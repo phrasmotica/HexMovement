@@ -14,7 +14,7 @@ static string ToString(IHexGrid hexGrid, Player player)
     return string.Join("\n", hexGrid.Rows.Select((r, i) => RowToString(r, i, player)));
 }
 
-static string RowToString(List<Hex> hexes, int row, Player player)
+static string RowToString(List<IHex> hexes, int row, Player player)
 {
     var joined = string.Join(" ", hexes.Select(h => HexToString(h, player)));
 
@@ -26,9 +26,9 @@ static string RowToString(List<Hex> hexes, int row, Player player)
     return joined;
 }
 
-static string HexToString(Hex hex, Player player) => IsOccupied(hex, player) ? "X" : ".";
+static string HexToString(IHex hex, Player player) => IsOccupied(hex, player) ? "X" : ".";
 
-static bool IsOccupied(Hex hex, Player player) => player.Hex == hex;
+static bool IsOccupied(IHex hex, Player player) => player.Hex == hex;
 
 static void ToggleWrapMovement(IHexGrid hexGrid)
 {
@@ -54,7 +54,7 @@ static void PrintHelp()
 Console.WriteLine("HexGrid");
 Console.WriteLine();
 
-var hexGrid = new HexGrid.HexGrid(8, 6);
+var hexGrid = new HexGrid.DoubleWidthHexGrid(8, 6);
 
 var player = new Player()
 {
